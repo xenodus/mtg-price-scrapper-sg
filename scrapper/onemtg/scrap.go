@@ -49,12 +49,12 @@ func (s Store) Scrap(searchStr string) ([]scrapper.Card, error) {
 			}
 
 			cards = append(cards, scrapper.Card{
-				Name:    el.ChildText("p.productTitle"),
-				Url:     s.BaseUrl + el.ChildAttr("a", "href"),
+				Name:    strings.TrimSpace(el.ChildText("p.productTitle")),
+				Url:     strings.TrimSpace(s.BaseUrl + el.ChildAttr("a", "href")),
 				InStock: isInstock,
 				Price:   price,
 				Source:  s.Name,
-				Img:     "https:" + el.ChildAttr("img", "src"),
+				Img:     strings.TrimSpace("https:" + el.ChildAttr("img", "src")),
 			})
 		})
 	})

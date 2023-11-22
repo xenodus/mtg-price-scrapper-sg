@@ -53,12 +53,12 @@ func (s Store) Scrap(searchStr string) ([]scrapper.Card, error) {
 			// Exclude Japanese cards
 			if price > 0 && !strings.Contains(name, "Japanese") {
 				cards = append(cards, scrapper.Card{
-					Name:    el.ChildText("div.store-item-title"),
-					Url:     s.BaseUrl + "/store/search?category=mtg&searchfield=" + url.QueryEscape(searchStr),
+					Name:    strings.TrimSpace(el.ChildText("div.store-item-title")),
+					Url:     strings.TrimSpace(s.BaseUrl + "/store/search?category=mtg&searchfield=" + url.QueryEscape(searchStr)),
 					InStock: isInstock,
 					Price:   price,
 					Source:  s.Name,
-					Img:     el.ChildAttr("div.store-item-img", "data-img"),
+					Img:     strings.TrimSpace(el.ChildAttr("div.store-item-img", "data-img")),
 				})
 			}
 		})

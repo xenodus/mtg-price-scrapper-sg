@@ -55,7 +55,7 @@ func main() {
 		i := 1
 		for _, c := range cards {
 			if c.InStock {
-				log.Println(fmt.Sprintf("%v. ", i), c.Name, " | ", fmt.Sprintf("S$ %.2f", c.Price*100/100), " | ", c.Img)
+				log.Println(fmt.Sprintf("%v. ", i), c.Name, " | "+fmt.Sprintf("S$ %.2f", c.Price*100/100), " | "+c.Source)
 				i++
 			}
 		}

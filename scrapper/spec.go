@@ -1,12 +1,12 @@
 package scrapper
 
 type Card struct {
-	Name    string
-	Url     string
-	Img     string
-	Price   float64
-	InStock bool
-	Source  string
+	Name    string  `json:"name"`
+	Url     string  `json:"url"`
+	Img     string  `json:"img"`
+	Price   float64 `json:"price"`
+	InStock bool    `json:"inStock"`
+	Source  string  `json:"src"`
 }
 
 type Scrapper interface {
