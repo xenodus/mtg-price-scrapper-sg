@@ -13,6 +13,13 @@ github.com/antchfx/xmlquery
 # github.com/antchfx/xpath v1.1.8
 ## explicit
 github.com/antchfx/xpath
+# github.com/aws/aws-lambda-go v1.41.0
+## explicit; go 1.18
+github.com/aws/aws-lambda-go/events
+github.com/aws/aws-lambda-go/lambda
+github.com/aws/aws-lambda-go/lambda/handlertrace
+github.com/aws/aws-lambda-go/lambda/messages
+github.com/aws/aws-lambda-go/lambdacontext
 # github.com/gobwas/glob v0.2.3
 ## explicit
 github.com/gobwas/glob
@@ -34,9 +41,6 @@ github.com/golang/groupcache/lru
 # github.com/golang/protobuf v1.4.2
 ## explicit; go 1.9
 github.com/golang/protobuf/proto
-# github.com/gorilla/mux v1.8.1
-## explicit; go 1.20
-github.com/gorilla/mux
 # github.com/kennygrant/sanitize v1.2.4
 ## explicit
 github.com/kennygrant/sanitize

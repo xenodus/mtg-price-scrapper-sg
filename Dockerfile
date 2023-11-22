@@ -1,18 +1,13 @@
-FROM golang:alpine
-
-RUN apk update && apk add --no-cache git && apk add --no-cach bash && apk add build-base
-
-RUN mkdir /app
-WORKDIR /app
-
+FROM golang:1.21.3-alpine3.18 as build
+WORKDIR /mtg-price-scrapper
+# Copy dependencies list
 COPY go.mod go.sum ./
 COPY scrapper ./scrapper
-COPY *.go ./
-
+COPY main.go .
 RUN go mod download
-
-RUN CGO_ENABLED=0 GOOS=linux go build -o /build
-
-EXPOSE 8080
-
-CMD ["/build"]
+# Build
+RUN go build -o main main.go
+# Copy artifacts to a clean image
+FROM alpine:3.18
+COPY --from=build /mtg-price-scrapper/main /main
+ENTRYPOINT [ "/main" ]

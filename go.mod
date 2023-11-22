@@ -3,8 +3,8 @@ module mtg-price-scrapper-sg
 go 1.21.3
 
 require (
+	github.com/aws/aws-lambda-go v1.41.0
 	github.com/gocolly/colly/v2 v2.1.0
-	github.com/gorilla/mux v1.8.1
 )
 
 require (
