@@ -62,6 +62,7 @@ func (s Store) Scrap(searchStr string) ([]scrapper.Card, error) {
 					InStock: isInstock,
 					Price:   price,
 					Source:  s.Name,
+					Img:     "https:" + el.ChildAttr("img", "data-src"),
 				})
 			}
 		})
