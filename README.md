@@ -1,2 +1,2 @@
 # mtg-price-scrapper-sg
-MTG price scrapped for local game stores in Singapore
+MTG price scrapper for local game stores in Singapore
