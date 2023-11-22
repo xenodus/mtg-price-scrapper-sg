@@ -2,10 +2,12 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 	"sort"
 	"strings"
+	"time"
 
 	"github.com/gorilla/mux"
 	"mtg-price-scrapper-sg/scrapper"
@@ -27,12 +29,7 @@ type webResponse struct {
 func main() {
 	r := mux.NewRouter()
 	r.HandleFunc("/", searchCards).Methods("GET")
-
-	srv := &http.Server{
-		Addr:    ":8080",
-		Handler: r,
-	}
-	srv.ListenAndServe()
+	http.ListenAndServe(":8080", r)
 }
 
 func searchCards(w http.ResponseWriter, r *http.Request) {
@@ -57,8 +54,9 @@ func searchCards(w http.ResponseWriter, r *http.Request) {
 
 		log.Println("Start checking shops...")
 		for shopName, shopScrapper := range shopScrapperMap {
+			start := time.Now()
 			c, _ := shopScrapper.Scrap(searchString)
-			log.Println("Done: " + shopName)
+			log.Println(fmt.Sprintf("Done: %s. Took: %s", shopName, time.Since(start)))
 
 			if len(c) > 0 {
 				cards = append(cards, c...)
