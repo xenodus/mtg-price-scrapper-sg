@@ -13,6 +13,7 @@ import (
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
 	"mtg-price-scrapper-sg/scrapper"
+	"mtg-price-scrapper-sg/scrapper/agora"
 	"mtg-price-scrapper-sg/scrapper/flagship"
 	"mtg-price-scrapper-sg/scrapper/gog"
 	"mtg-price-scrapper-sg/scrapper/hideout"
@@ -95,7 +96,7 @@ func lambdaApiResponse(apiResponse events.APIGatewayProxyResponse, webResponse w
 
 func initAndMapScrappers() map[string]scrapper.Scrapper {
 	return map[string]scrapper.Scrapper{
-		// agora.StoreName:     agora.NewScrapper(),
+		agora.StoreName:     agora.NewScrapper(),
 		flagship.StoreName:  flagship.NewScrapper(),
 		onemtg.StoreName:    onemtg.NewScrapper(),
 		manapro.StoreName:   manapro.NewScrapper(),
