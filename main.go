@@ -21,9 +21,9 @@ import (
 )
 
 type webResponse struct {
-	Status     string          `json:"status"`
-	StatusCode int             `json:"statusCode"`
-	Data       []scrapper.Card `json:"data"`
+	Status string          `json:"status"`
+	Code   int             `json:"code"`
+	Data   []scrapper.Card `json:"data"`
 }
 
 func main() {
@@ -36,8 +36,8 @@ func searchCards(w http.ResponseWriter, r *http.Request) {
 	var cards, inStockCards []scrapper.Card
 
 	res := webResponse{
-		Status:     "Err",
-		StatusCode: http.StatusBadRequest,
+		Status: "Err",
+		Code:   http.StatusBadRequest,
 	}
 
 	searchString := strings.TrimSpace(r.URL.Query().Get("s"))
@@ -65,7 +65,7 @@ func searchCards(w http.ResponseWriter, r *http.Request) {
 		log.Println("End checking shops...")
 
 		res.Status = "OK"
-		res.StatusCode = http.StatusOK
+		res.Code = http.StatusOK
 
 		if len(cards) > 0 {
 			// Sort by price ASC
@@ -74,7 +74,7 @@ func searchCards(w http.ResponseWriter, r *http.Request) {
 			})
 
 			for _, c := range cards {
-				if c.InStock {
+				if c.InStock && !strings.Contains(strings.ToLower(c.Name), "art card") {
 					inStockCards = append(inStockCards, c)
 				}
 			}
@@ -92,16 +92,16 @@ func searchCards(w http.ResponseWriter, r *http.Request) {
 }
 
 func returnWebResponse(w http.ResponseWriter, res webResponse) {
-	responseBytes, err := json.Marshal(res)
+	responseBytes, err := json.MarshalIndent(res, "", "    ")
 	if err != nil {
 		log.Println("err marshalling to json result", err)
 
 		res.Status = "Error: encoding json"
-		res.StatusCode = http.StatusInternalServerError
+		res.Code = http.StatusInternalServerError
 	}
 
 	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(res.StatusCode)
+	w.WriteHeader(res.Code)
 	w.Write(responseBytes)
 }
 
