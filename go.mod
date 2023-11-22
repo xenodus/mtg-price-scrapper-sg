@@ -2,7 +2,10 @@ module mtg-price-scrapper-sg
 
 go 1.21.3
 
-require github.com/gocolly/colly/v2 v2.1.0
+require (
+	github.com/gocolly/colly/v2 v2.1.0
+	github.com/gorilla/mux v1.8.1
+)
 
 require (
 	github.com/PuerkitoBio/goquery v1.5.1 // indirect
