@@ -1,4 +1,4 @@
-module mtg-scrapper
+module mtg-price-scrapper-sg
 
 go 1.21.3
 
