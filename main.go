@@ -26,6 +26,10 @@ type webResponse struct {
 	Data []scrapper.Card `json:"data"`
 }
 
+func main() {
+	lambda.Start(handler)
+}
+
 func handler(_ context.Context, request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	var cards, inStockCards []scrapper.Card
 	var apiRes events.APIGatewayProxyResponse
@@ -77,10 +81,6 @@ func handler(_ context.Context, request events.APIGatewayProxyRequest) (events.A
 	return apiRes, nil
 }
 
-func main() {
-	lambda.Start(handler)
-}
-
 func lambdaApiResponse(apiResponse events.APIGatewayProxyResponse, webResponse webResponse) (events.APIGatewayProxyResponse, error) {
 	bodyBytes, err := json.MarshalIndent(webResponse, "", "    ")
 	if err != nil {
@@ -89,7 +89,7 @@ func lambdaApiResponse(apiResponse events.APIGatewayProxyResponse, webResponse w
 		return apiResponse, nil
 	}
 
-	apiResponse.Body = string(bodyBytes)
+	apiResponse.Body = strings.Replace(string(bodyBytes), "\\u0026", "&", -1)
 
 	return apiResponse, nil
 }
