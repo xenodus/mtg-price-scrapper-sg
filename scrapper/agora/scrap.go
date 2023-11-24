@@ -11,21 +11,24 @@ import (
 
 const StoreName = "Agora Hobby"
 const StoreBaseURL = "https://agorahobby.com"
+const StoreSearchURL = "/store/search?category=mtg&searchfield="
 
 type Store struct {
-	Name    string
-	BaseUrl string
+	Name      string
+	BaseUrl   string
+	SearchUrl string
 }
 
 func NewScrapper() scrapper.Scrapper {
 	return Store{
-		Name:    StoreName,
-		BaseUrl: StoreBaseURL,
+		Name:      StoreName,
+		BaseUrl:   StoreBaseURL,
+		SearchUrl: StoreSearchURL,
 	}
 }
 
 func (s Store) Scrap(searchStr string) ([]scrapper.Card, error) {
-	searchURL := s.BaseUrl + "/store/search?category=mtg&searchfield=" + url.QueryEscape(searchStr)
+	searchURL := s.BaseUrl + s.SearchUrl + url.QueryEscape(searchStr)
 	var cards []scrapper.Card
 
 	c := colly.NewCollector()
