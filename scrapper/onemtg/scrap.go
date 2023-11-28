@@ -71,6 +71,7 @@ func parsePriceRegex(price string) (float64, error) {
 	m := re.FindAllStringSubmatch(price, -1)
 	if len(m) > 0 && len(m[0]) > 1 && len(m[0][1]) > 0 {
 		m[0][1] = strings.Replace(m[0][1], "$", "", -1)
+		m[0][1] = strings.Replace(m[0][1], ",", "", -1)
 		return strconv.ParseFloat(m[0][1], 64)
 	}
 	return 0, nil

@@ -22,12 +22,18 @@ import (
 	"mtg-price-scrapper-sg/scrapper/sanctuary"
 )
 
+const isTestEnv = false
+
 type webResponse struct {
 	Data []scrapper.Card `json:"data"`
 }
 
 func main() {
-	lambda.Start(handler)
+	if isTestEnv {
+		log.Println(handler(context.Background(), events.APIGatewayProxyRequest{}))
+	} else {
+		lambda.Start(handler)
+	}
 }
 
 func handler(_ context.Context, request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
@@ -36,6 +42,10 @@ func handler(_ context.Context, request events.APIGatewayProxyRequest) (events.A
 	var webRes webResponse
 
 	searchString := strings.TrimSpace(request.QueryStringParameters["s"])
+
+	if isTestEnv {
+		searchString = "Abrade"
+	}
 
 	if searchString == "" {
 		apiRes.StatusCode = http.StatusBadRequest
