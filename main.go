@@ -19,6 +19,7 @@ import (
 	"mtg-price-scrapper-sg/scrapper/gog"
 	"mtg-price-scrapper-sg/scrapper/hideout"
 	"mtg-price-scrapper-sg/scrapper/manapro"
+	"mtg-price-scrapper-sg/scrapper/moxandlotus"
 	"mtg-price-scrapper-sg/scrapper/onemtg"
 	"mtg-price-scrapper-sg/scrapper/sanctuary"
 )
@@ -45,7 +46,7 @@ func handler(_ context.Context, request events.APIGatewayProxyRequest) (events.A
 	searchString := strings.TrimSpace(request.QueryStringParameters["s"])
 
 	if isTestEnv {
-		searchString = "Abrade"
+		searchString = "Sol Ring"
 	}
 
 	if searchString == "" {
@@ -85,11 +86,10 @@ func handler(_ context.Context, request events.APIGatewayProxyRequest) (events.A
 
 		if len(inStockCards) > 0 {
 			webRes.Data = inStockCards
-			return lambdaApiResponse(apiRes, webRes)
 		}
 	}
 
-	return apiRes, nil
+	return lambdaApiResponse(apiRes, webRes)
 }
 
 func lambdaApiResponse(apiResponse events.APIGatewayProxyResponse, webResponse webResponse) (events.APIGatewayProxyResponse, error) {
@@ -107,13 +107,14 @@ func lambdaApiResponse(apiResponse events.APIGatewayProxyResponse, webResponse w
 
 func initAndMapScrappers() map[string]scrapper.Scrapper {
 	return map[string]scrapper.Scrapper{
-		agora.StoreName:      agora.NewScrapper(),
-		flagship.StoreName:   flagship.NewScrapper(),
-		onemtg.StoreName:     onemtg.NewScrapper(),
-		manapro.StoreName:    manapro.NewScrapper(),
-		gog.StoreName:        gog.NewScrapper(),
-		hideout.StoreName:    hideout.NewScrapper(),
-		sanctuary.StoreName:  sanctuary.NewScrapper(),
-		gameshaven.StoreName: gameshaven.NewScrapper(),
+		agora.StoreName:       agora.NewScrapper(),
+		flagship.StoreName:    flagship.NewScrapper(),
+		onemtg.StoreName:      onemtg.NewScrapper(),
+		manapro.StoreName:     manapro.NewScrapper(),
+		gog.StoreName:         gog.NewScrapper(),
+		hideout.StoreName:     hideout.NewScrapper(),
+		sanctuary.StoreName:   sanctuary.NewScrapper(),
+		gameshaven.StoreName:  gameshaven.NewScrapper(),
+		moxandlotus.StoreName: moxandlotus.NewScrapper(),
 	}
 }
