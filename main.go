@@ -15,6 +15,7 @@ import (
 	"mtg-price-scrapper-sg/scrapper"
 	"mtg-price-scrapper-sg/scrapper/agora"
 	"mtg-price-scrapper-sg/scrapper/flagship"
+	"mtg-price-scrapper-sg/scrapper/gameshaven"
 	"mtg-price-scrapper-sg/scrapper/gog"
 	"mtg-price-scrapper-sg/scrapper/hideout"
 	"mtg-price-scrapper-sg/scrapper/manapro"
@@ -106,12 +107,13 @@ func lambdaApiResponse(apiResponse events.APIGatewayProxyResponse, webResponse w
 
 func initAndMapScrappers() map[string]scrapper.Scrapper {
 	return map[string]scrapper.Scrapper{
-		agora.StoreName:     agora.NewScrapper(),
-		flagship.StoreName:  flagship.NewScrapper(),
-		onemtg.StoreName:    onemtg.NewScrapper(),
-		manapro.StoreName:   manapro.NewScrapper(),
-		gog.StoreName:       gog.NewScrapper(),
-		hideout.StoreName:   hideout.NewScrapper(),
-		sanctuary.StoreName: sanctuary.NewScrapper(),
+		agora.StoreName:      agora.NewScrapper(),
+		flagship.StoreName:   flagship.NewScrapper(),
+		onemtg.StoreName:     onemtg.NewScrapper(),
+		manapro.StoreName:    manapro.NewScrapper(),
+		gog.StoreName:        gog.NewScrapper(),
+		hideout.StoreName:    hideout.NewScrapper(),
+		sanctuary.StoreName:  sanctuary.NewScrapper(),
+		gameshaven.StoreName: gameshaven.NewScrapper(),
 	}
 }

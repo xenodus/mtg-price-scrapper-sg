@@ -55,6 +55,7 @@ func (s Store) Scrap(searchStr string) ([]scrapper.Card, error) {
 			}
 
 			priceStr = strings.Replace(priceStr, "$", "", -1)
+			priceStr = strings.Replace(priceStr, ",", "", -1)
 			priceStr = strings.Replace(priceStr, "SGD", "", -1)
 			price, _ = strconv.ParseFloat(strings.TrimSpace(priceStr), 64)
 

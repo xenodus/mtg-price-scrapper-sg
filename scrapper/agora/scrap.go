@@ -48,7 +48,8 @@ func (s Store) Scrap(searchStr string) ([]scrapper.Card, error) {
 			// price
 			priceStr := strings.TrimSpace(el.ChildText("div.store-item-price"))
 			priceStr = strings.Replace(priceStr, "$", "", -1)
-			price, _ = strconv.ParseFloat(priceStr, 64)
+			priceStr = strings.Replace(priceStr, ",", "", -1)
+			price, _ = strconv.ParseFloat(strings.TrimSpace(priceStr), 64)
 
 			// name
 			name := el.ChildText("div.store-item-title")
