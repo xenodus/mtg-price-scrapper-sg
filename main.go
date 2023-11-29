@@ -6,6 +6,8 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"net/url"
+	"slices"
 	"sort"
 	"strings"
 	"time"
@@ -42,11 +44,20 @@ func handler(_ context.Context, request events.APIGatewayProxyRequest) (events.A
 	var cards, inStockCards []scrapper.Card
 	var apiRes events.APIGatewayProxyResponse
 	var webRes webResponse
+	var lgs []string
 
-	searchString := strings.TrimSpace(request.QueryStringParameters["s"])
+	searchString, err := url.QueryUnescape(strings.TrimSpace(request.QueryStringParameters["s"]))
+	if err != nil {
+		searchString = ""
+	}
+	lgsString, err := url.QueryUnescape(strings.TrimSpace(request.QueryStringParameters["lgs"]))
+	if err != nil {
+		lgsString = ""
+	}
 
 	if isTestEnv {
 		searchString = "Sol Ring"
+		lgsString, _ = url.QueryUnescape("Flagship%20Games%2CGames%20Haven%2CGrey%20Ogre%20Games%2CHideout%2CManaPro%2CMox%20%26%20Lotus%2COneMtg%2CSanctuary%20Gaming")
 	}
 
 	if searchString == "" {
@@ -54,8 +65,11 @@ func handler(_ context.Context, request events.APIGatewayProxyRequest) (events.A
 		return lambdaApiResponse(apiRes, webRes)
 	}
 
-	log.Println("Searching for card: " + searchString)
-	shopScrapperMap := initAndMapScrappers()
+	if lgsString != "" {
+		lgs = strings.Split(lgsString, ",")
+	}
+
+	shopScrapperMap := initAndMapScrappers(lgs)
 
 	log.Println("Start checking shops...")
 	for shopName, shopScrapper := range shopScrapperMap {
@@ -105,8 +119,8 @@ func lambdaApiResponse(apiResponse events.APIGatewayProxyResponse, webResponse w
 	return apiResponse, nil
 }
 
-func initAndMapScrappers() map[string]scrapper.Scrapper {
-	return map[string]scrapper.Scrapper{
+func initAndMapScrappers(lgs []string) map[string]scrapper.Scrapper {
+	storeScrappers := map[string]scrapper.Scrapper{
 		agora.StoreName:       agora.NewScrapper(),
 		flagship.StoreName:    flagship.NewScrapper(),
 		onemtg.StoreName:      onemtg.NewScrapper(),
@@ -117,4 +131,13 @@ func initAndMapScrappers() map[string]scrapper.Scrapper {
 		gameshaven.StoreName:  gameshaven.NewScrapper(),
 		moxandlotus.StoreName: moxandlotus.NewScrapper(),
 	}
+
+	if len(lgs) > 0 {
+		for storeName, _ := range storeScrappers {
+			if !slices.Contains(lgs, storeName) {
+				delete(storeScrappers, storeName)
+			}
+		}
+	}
+	return storeScrappers
 }
