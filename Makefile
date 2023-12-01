@@ -9,6 +9,9 @@ docker-tag:
 docker-push:
 	docker push 206363131200.dkr.ecr.ap-southeast-1.amazonaws.com/mtg-price-scrapper:latest
 
+web-update:
+	aws s3 sync web s3://mtg.alvinyeoh.com
+
 lambda-create:
 	aws lambda create-function \
       --function-name mtg-price-scrapper \
