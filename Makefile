@@ -1,4 +1,4 @@
-deploy: docker-build docker-tag aws-login docker-push lambda-update
+deploy: docker-build docker-tag aws-login docker-push lambda-update web-update
 
 docker-build:
 	docker build --platform linux/amd64 -t mtg-price-scrapper .
