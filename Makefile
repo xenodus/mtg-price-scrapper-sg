@@ -11,6 +11,7 @@ docker-push:
 
 web-update:
 	aws s3 sync web s3://mtg.alvinyeoh.com
+	aws cloudfront create-invalidation --distribution-id E38J3NSJEF32G3 --paths "/*"
 
 lambda-create:
 	aws lambda create-function \
