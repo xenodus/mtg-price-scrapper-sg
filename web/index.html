@@ -8,11 +8,15 @@
 </head>
 <body>
 <div class="container-fluid mt-3">
-    <div class="mb-3">
-        <div class="mb-3">
-            <h2>MTG Price Checker for Singapore's LGS</h2>
-            <div>by <a href="https://github.com/xenodus" target="_blank">xenodus</a></div>
+    <div class="mb-3 text-center">
+        <div class="d-flex flex-row align-items-center justify-content-center mb-1">
+            <div><img style="width: 140px;" src="img/gishalt-fetch-web.jpeg"/></div>
         </div>
+        <div>
+            <h3>Magic: The Gathering Price Checker for Singapore's LGS</h3>
+        </div>
+    </div>
+    <div class="mb-3">
         <form id="searchForm">
             <div class="mb-3 form-floating">
                 <input type="text" class="form-control" id="search" placeholder="lightning bolt">
@@ -26,6 +30,12 @@
     </div>
     <div id="resultCount" class="mb-3 text-center bg-warning-subtle text-dark rounded fw-bold"></div>
     <div id="result" class="mb-3 text-center"></div>
+
+    <div class="text-center mb-3 fs-6 text-lowercase">
+        <footer>
+            <div>&copy; 2023 mtg.alvinyeoh.com by <a href="https://github.com/xenodus" target="_blank">xenodus</a></div>
+        </footer>
+    </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 <script>
