@@ -34,7 +34,9 @@ type webResponse struct {
 
 func main() {
 	if isTestEnv {
+		start := time.Now()
 		log.Println(handler(context.Background(), events.APIGatewayProxyRequest{}))
+		log.Println(fmt.Sprintf("Took: %s", time.Since(start)))
 	} else {
 		lambda.Start(handler)
 	}
@@ -71,35 +73,52 @@ func handler(_ context.Context, request events.APIGatewayProxyRequest) (events.A
 
 	shopScrapperMap := initAndMapScrappers(lgs)
 
-	log.Println("Start checking shops...")
-	for shopName, shopScrapper := range shopScrapperMap {
-		start := time.Now()
-		c, _ := shopScrapper.Scrap(searchString)
-		log.Println(fmt.Sprintf("Done: %s. Took: %s", shopName, time.Since(start)))
+	if len(shopScrapperMap) > 0 {
+		// Create a channel with a buffer size of numGoroutines
+		done := make(chan bool, len(shopScrapperMap))
 
-		if len(c) > 0 {
-			cards = append(cards, c...)
+		log.Println("Start checking shops...")
+		for shopName, shopScrapper := range shopScrapperMap {
+			shopName := shopName
+			shopScrapper := shopScrapper
+			go func() {
+				start := time.Now()
+				c, _ := shopScrapper.Scrap(searchString)
+				log.Println(fmt.Sprintf("Done: %s. Took: %s", shopName, time.Since(start)))
+
+				if len(c) > 0 {
+					cards = append(cards, c...)
+				}
+
+				// Signal that the goroutine is done
+				done <- true
+			}()
 		}
-	}
-	log.Println("End checking shops...")
 
-	apiRes.StatusCode = http.StatusOK
+		// Wait for all goroutines to finish
+		for i := 0; i < len(shopScrapperMap); i++ {
+			<-done
+		}
+		log.Println("End checking shops...")
 
-	if len(cards) > 0 {
-		// Sort by price ASC
-		sort.SliceStable(cards, func(i, j int) bool {
-			return cards[i].Price < cards[j].Price
-		})
+		apiRes.StatusCode = http.StatusOK
 
-		// Only showing in stock and not art card
-		for _, c := range cards {
-			if c.InStock && !strings.Contains(strings.ToLower(c.Name), "art card") {
-				inStockCards = append(inStockCards, c)
+		if len(cards) > 0 {
+			// Sort by price ASC
+			sort.SliceStable(cards, func(i, j int) bool {
+				return cards[i].Price < cards[j].Price
+			})
+
+			// Only showing in stock and not art card
+			for _, c := range cards {
+				if c.InStock && !strings.Contains(strings.ToLower(c.Name), "art card") {
+					inStockCards = append(inStockCards, c)
+				}
 			}
-		}
 
-		if len(inStockCards) > 0 {
-			webRes.Data = inStockCards
+			if len(inStockCards) > 0 {
+				webRes.Data = inStockCards
+			}
 		}
 	}
 
@@ -133,7 +152,7 @@ func initAndMapScrappers(lgs []string) map[string]scrapper.Scrapper {
 	}
 
 	if len(lgs) > 0 {
-		for storeName, _ := range storeScrappers {
+		for storeName := range storeScrappers {
 			if !slices.Contains(lgs, storeName) {
 				delete(storeScrappers, storeName)
 			}
