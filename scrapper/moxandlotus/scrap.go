@@ -112,12 +112,13 @@ func NewScrapper() scrapper.Scrapper {
 }
 
 func (s Store) Scrap(searchStr string) ([]scrapper.Card, error) {
-	var apiResponse apiResponse
+	var (
+		apiResponse apiResponse
+		cards       []scrapper.Card
+	)
 
 	searchURL := s.BaseUrl + s.SearchUrl + url.QueryEscape(searchStr)
 	apiURL := s.BaseUrl + StoreApiURL + url.QueryEscape(searchStr)
-
-	var cards []scrapper.Card
 
 	resp, err := http.Get(apiURL)
 	if err != nil {

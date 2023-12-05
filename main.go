@@ -16,6 +16,7 @@ import (
 	"github.com/aws/aws-lambda-go/lambda"
 	"mtg-price-scrapper-sg/scrapper"
 	"mtg-price-scrapper-sg/scrapper/agora"
+	"mtg-price-scrapper-sg/scrapper/duellerpoint"
 	"mtg-price-scrapper-sg/scrapper/flagship"
 	"mtg-price-scrapper-sg/scrapper/gameshaven"
 	"mtg-price-scrapper-sg/scrapper/gog"
@@ -74,7 +75,7 @@ func handler(_ context.Context, request events.APIGatewayProxyRequest) (events.A
 	shopScrapperMap := initAndMapScrappers(lgs)
 
 	if len(shopScrapperMap) > 0 {
-		// Create a channel with a buffer size of numGoroutines
+		// Create a channel with a buffer size of shopScrapperMap
 		done := make(chan bool, len(shopScrapperMap))
 
 		log.Println("Start checking shops...")
@@ -140,15 +141,16 @@ func lambdaApiResponse(apiResponse events.APIGatewayProxyResponse, webResponse w
 
 func initAndMapScrappers(lgs []string) map[string]scrapper.Scrapper {
 	storeScrappers := map[string]scrapper.Scrapper{
-		agora.StoreName:       agora.NewScrapper(),
-		flagship.StoreName:    flagship.NewScrapper(),
-		onemtg.StoreName:      onemtg.NewScrapper(),
-		manapro.StoreName:     manapro.NewScrapper(),
-		gog.StoreName:         gog.NewScrapper(),
-		hideout.StoreName:     hideout.NewScrapper(),
-		sanctuary.StoreName:   sanctuary.NewScrapper(),
-		gameshaven.StoreName:  gameshaven.NewScrapper(),
-		moxandlotus.StoreName: moxandlotus.NewScrapper(),
+		agora.StoreName:        agora.NewScrapper(),
+		duellerpoint.StoreName: duellerpoint.NewScrapper(),
+		flagship.StoreName:     flagship.NewScrapper(),
+		gameshaven.StoreName:   gameshaven.NewScrapper(),
+		gog.StoreName:          gog.NewScrapper(),
+		hideout.StoreName:      hideout.NewScrapper(),
+		manapro.StoreName:      manapro.NewScrapper(),
+		moxandlotus.StoreName:  moxandlotus.NewScrapper(),
+		onemtg.StoreName:       onemtg.NewScrapper(),
+		sanctuary.StoreName:    sanctuary.NewScrapper(),
 	}
 
 	if len(lgs) > 0 {

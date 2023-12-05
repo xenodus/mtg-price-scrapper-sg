@@ -50,6 +50,7 @@
 
     const lgsOptions = [
         "Agora Hobby",
+        "Dueller's Point",
         "Flagship Games",
         "Games Haven",
         "Grey Ogre Games",
@@ -79,7 +80,7 @@
     }
 
     function fillSearch() {
-        if(getCookie('search') !== undefined && getCookie('search') != "") {
+        if(getCookie('search') !== undefined && getCookie('search') !== "") {
             searchInput.value = decodeURIComponent(getCookie('search'));
         }
     }
@@ -87,7 +88,7 @@
     function appendLgsCheckboxes() {
         let lgsSelected = [];
 
-        if(getCookie('lgsSelected') !== undefined && getCookie('lgsSelected') != "") {
+        if(getCookie('lgsSelected') !== undefined && getCookie('lgsSelected') !== "") {
             lgsSelected = decodeURIComponent(getCookie('lgsSelected')).split(",");
         } else {
             lgsSelected = lgsOptions;
@@ -158,7 +159,7 @@
             }
         }
 
-        if (lgsSelected.length == 0) {
+        if (lgsSelected.length === 0) {
             lgsSelected = lgsOptions;
             for(let i=0; i<lgsCheckboxes.length; i++) {
                 lgsCheckboxes[i].checked = true;
@@ -182,11 +183,11 @@
         updateSubmitBtnProgress();
 
         request.onreadystatechange = function() {
-            if (request.readyState == XMLHttpRequest.DONE) {
+            if (request.readyState === XMLHttpRequest.DONE) {
                 let resultCount = 0;
 
                 // Check the status of the response
-                if (request.status == 200) {
+                if (request.status === 200) {
                     // Access the data returned by the server
                     var result = JSON.parse(request.responseText);
                     // Do something with the data
