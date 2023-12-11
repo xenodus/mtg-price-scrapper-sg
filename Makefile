@@ -1,4 +1,4 @@
-deploy: docker-build docker-tag aws-login docker-push lambda-update web-update
+deploy: api-test docker-build docker-tag aws-login docker-push lambda-update web-update
 
 docker-build:
 	docker build --platform linux/amd64 -t mtg-price-scrapper .
@@ -27,3 +27,6 @@ lambda-update:
 
 aws-login:
 	aws ecr get-login-password --region ap-southeast-1 | docker login --username AWS --password-stdin 206363131200.dkr.ecr.ap-southeast-1.amazonaws.com
+
+api-test:
+	go test -mod=vendor -failfast -timeout 5m ./...
