@@ -63,9 +63,9 @@
     const resultDiv = document.getElementById("result");
     const resultCountDiv = document.getElementById("resultCount");
     const lgsCheckboxes = document.getElementsByName('lgs[]');
-
     const lgsOptions = [
         "Agora Hobby",
+        "Cards Citadel",
         "Dueller's Point",
         "Flagship Games",
         "Games Haven",
@@ -187,8 +187,8 @@
         // Reset result div
         resetResult();
 
-        var request = new XMLHttpRequest();
-        var searchUrl = "https://api.alvinyeoh.com/?s="+encodeURIComponent(searchInput.value);
+        let request = new XMLHttpRequest();
+        let searchUrl = "https://api.alvinyeoh.com/?s="+encodeURIComponent(searchInput.value);
         searchUrl += "&lgs=" + encodeURIComponent(lgsSelected.join(','));
 
         setCookie(lgsSelected);
@@ -217,18 +217,18 @@
                                     && result["data"][i].hasOwnProperty("price")
                                     && result["data"][i].hasOwnProperty("src")) {
                                     let h = `
-                      <div class="col-lg-3 col-6 mb-3">
-                        <div class="text-center">
-                          <a href="`+result["data"][i]["url"]+`" target="_blank">
-                            <img src="`+result["data"][i]["img"]+`" loading="lazy" class="img-fluid img-thumbnail bg-dark" alt="`+result["data"][i]["name"]+`"/>
-                          </a>
-                        </div>
-                        <div class="text-center">
-                          <div><strong>`+result["data"][i]["name"]+`</strong></div>
-                          <div>S$ `+result["data"][i]["price"].toFixed(2)+`</div>
-                          <div><a href="`+result["data"][i]["url"]+`" target="_blank">`+result["data"][i]["src"]+`</a></div>
-                        </div>
-                      </div>`;
+                                      <div class="col-lg-3 col-6 mb-3">
+                                        <div class="text-center">
+                                          <a href="`+result["data"][i]["url"]+`" target="_blank">
+                                            <img src="`+result["data"][i]["img"]+`" loading="lazy" class="img-fluid img-thumbnail bg-dark" alt="`+result["data"][i]["name"]+`"/>
+                                          </a>
+                                        </div>
+                                        <div class="text-center">
+                                          <div><strong>`+result["data"][i]["name"]+`</strong></div>
+                                          <div>S$ `+result["data"][i]["price"].toFixed(2)+`</div>
+                                          <div><a href="`+result["data"][i]["url"]+`" target="_blank">`+result["data"][i]["src"]+`</a></div>
+                                        </div>
+                                      </div>`;
                                     html += h
                                     resultCount++;
                                 }
