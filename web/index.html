@@ -26,10 +26,14 @@
 <div class="container my-3 px-3">
     <div class="mb-3 text-center">
         <div class="d-flex flex-row align-items-center justify-content-center mb-1">
-            <div><img style="width: 120px;" src="img/gishalt-fetch-web.png"/></div>
+            <div>
+                <a href="https://mtg.alvinyeoh.com">
+                    <img style="width: 120px;" src="img/gishalt-fetch-web.png"/>
+                </a>
+            </div>
         </div>
         <div class="px-3">
-            <h4><strong>- Gishath Fetch -<br/>Magic: The Gathering Price Checker for Singapore's LGS</strong></h4>
+            <h4 class="fw-medium">- Gishath Fetch -<br/>Magic: The Gathering Price Checker for Singapore's LGS</h4>
         </div>
     </div>
     <div class="mb-3">
@@ -213,7 +217,7 @@
                                     && result["data"][i].hasOwnProperty("price")
                                     && result["data"][i].hasOwnProperty("src")) {
                                     let h = `
-                      <div class="col-lg-2 col-6 mb-3">
+                      <div class="col-lg-3 col-6 mb-3">
                         <div class="text-center">
                           <a href="`+result["data"][i]["url"]+`" target="_blank">
                             <img src="`+result["data"][i]["img"]+`" loading="lazy" class="img-fluid img-thumbnail bg-dark" alt="`+result["data"][i]["name"]+`"/>
