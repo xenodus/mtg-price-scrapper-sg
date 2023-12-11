@@ -7,11 +7,11 @@ docker-tag:
 	docker tag mtg-price-scrapper 206363131200.dkr.ecr.ap-southeast-1.amazonaws.com/mtg-price-scrapper:latest
 
 docker-push:
-	docker push 206363131200.dkr.ecr.ap-southeast-1.amazonaws.com/mtg-price-scrapper:latest
+	export AWS_PAGER="" && docker push 206363131200.dkr.ecr.ap-southeast-1.amazonaws.com/mtg-price-scrapper:latest
 
 web-update:
 	aws s3 sync web s3://mtg.alvinyeoh.com
-	aws cloudfront create-invalidation --distribution-id E38J3NSJEF32G3 --paths "/*"
+	export AWS_PAGER="" && aws cloudfront create-invalidation --distribution-id E38J3NSJEF32G3 --paths "/*"
 
 lambda-create:
 	aws lambda create-function \
@@ -21,7 +21,7 @@ lambda-create:
       --role arn:aws:iam::206363131200:role/lambda-mtg
 
 lambda-update:
-	aws lambda update-function-code \
+	export AWS_PAGER="" && aws lambda update-function-code \
       --function-name mtg-price-scrapper \
       --image-uri 206363131200.dkr.ecr.ap-southeast-1.amazonaws.com/mtg-price-scrapper:latest
 
