@@ -10,8 +10,8 @@ docker-push:
 	export AWS_PAGER="" && docker push 206363131200.dkr.ecr.ap-southeast-1.amazonaws.com/mtg-price-scrapper:latest
 
 web-update:
-	aws s3 sync web s3://mtg.alvinyeoh.com
-	export AWS_PAGER="" && aws cloudfront create-invalidation --distribution-id E38J3NSJEF32G3 --paths "/*"
+	aws s3 sync web s3://gishathfetch.com
+	export AWS_PAGER="" && aws cloudfront create-invalidation --distribution-id E3NPGUM21YCN36 --paths "/*"
 
 lambda-create:
 	aws lambda create-function \
