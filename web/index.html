@@ -176,6 +176,18 @@
     function onFormSubmit(event) {
         event.preventDefault();
 
+        let searchStr = searchInput.value.trim()
+
+        // End if empty search str
+        if (searchStr === "") {
+            return
+        }
+
+        // Tag search str
+        gtag('event', 'search', {
+            'keyword': searchStr
+        });
+
         let lgsSelected = [];
 
         for(let i=0; i<lgsCheckboxes.length; i++) {
@@ -197,7 +209,7 @@
         resetResult();
 
         let request = new XMLHttpRequest();
-        let searchUrl = "https://api.gishathfetch.com/?s="+encodeURIComponent(searchInput.value);
+        let searchUrl = "https://api.gishathfetch.com/?s="+encodeURIComponent(searchStr);
         searchUrl += "&lgs=" + encodeURIComponent(lgsSelected.join(','));
 
         setCookie(lgsSelected);
