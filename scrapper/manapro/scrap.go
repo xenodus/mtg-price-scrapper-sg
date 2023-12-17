@@ -9,7 +9,7 @@ import (
 	"mtg-price-scrapper-sg/scrapper"
 )
 
-const StoreName = "ManaPro"
+const StoreName = "Mana Pro"
 const StoreBaseURL = "https://sg-manapro.com"
 const StoreSearchURL = "/search?type=product&q="
 
