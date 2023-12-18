@@ -1,6 +1,10 @@
 body {
     font-family: 'Barlow', serif;
 }
+.map-item iframe{
+    float:left;
+    min-height: 450px;
+}
 @media (min-width: 1400px) {
     .container {
         max-width: 960px;

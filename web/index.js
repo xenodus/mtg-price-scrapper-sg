@@ -197,6 +197,12 @@ function onFormSubmit(event) {
                         resultDiv.innerHTML = html;
                     }
                 }
+
+                // Tag search str
+                gtag('event', 'view_search_results', {
+                    'search_term': searchStr
+                });
+
             } else {
                 // Handle error
             }
