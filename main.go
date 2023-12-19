@@ -61,7 +61,7 @@ func handler(_ context.Context, request events.APIGatewayProxyRequest) (events.A
 
 	if isTestEnv {
 		searchString = "Sol Ring"
-		lgsString, _ = url.QueryUnescape("Flagship%20Games%2CGames%20Haven%2CGrey%20Ogre%20Games%2CHideout%2CManaPro%2CMox%20%26%20Lotus%2COneMtg%2CSanctuary%20Gaming")
+		lgsString, _ = url.QueryUnescape("Flagship%20Games%2CGames%20Haven%2CGrey%20Ogre%20Games%2CHideout%2CMana%20Pro%2CMox%20%26%20Lotus%2COneMtg%2CSanctuary%20Gaming")
 	}
 
 	if searchString == "" {
@@ -111,9 +111,9 @@ func handler(_ context.Context, request events.APIGatewayProxyRequest) (events.A
 				return cards[i].Price < cards[j].Price
 			})
 
-			// Only showing in stock and not art card
+			// Only showing in stock, contains searched string and not art card
 			for _, c := range cards {
-				if c.InStock && !strings.Contains(strings.ToLower(c.Name), "art card") {
+				if c.InStock && strings.Contains(strings.ToLower(c.Name), strings.ToLower(searchString)) && !strings.Contains(strings.ToLower(c.Name), "art card") {
 					inStockCards = append(inStockCards, c)
 				}
 			}
