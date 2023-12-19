@@ -41,23 +41,25 @@ func (s Store) Scrap(searchStr string) ([]scrapper.Card, error) {
 				price     float64
 			)
 
+			// in stock + price
+			// only have in stock data
 			if len(el.ChildTexts("div.addNow")) > 0 {
-				priceStr := strings.TrimSpace(el.ChildTexts("div.addNow")[0])
-				price, _ = parsePriceRegex(priceStr)
-				if price > 0 {
-					isInstock = true
-				}
-			}
+				for i := 0; i < len(el.ChildTexts("div.addNow")); i++ {
+					isInstock = el.ChildTexts("div.addNow")[i] != ""
+					priceStr := strings.TrimSpace(el.ChildTexts("div.addNow")[i])
+					price, _ = parsePriceRegex(priceStr)
 
-			if price > 0 {
-				cards = append(cards, scrapper.Card{
-					Name:    strings.TrimSpace(el.ChildText("p.productTitle")),
-					Url:     strings.TrimSpace(s.BaseUrl + el.ChildAttr("a", "href")),
-					InStock: isInstock,
-					Price:   price,
-					Source:  s.Name,
-					Img:     strings.TrimSpace("https:" + el.ChildAttr("img", "src")),
-				})
+					if price > 0 {
+						cards = append(cards, scrapper.Card{
+							Name:    strings.TrimSpace(el.ChildText("p.productTitle")),
+							Url:     strings.TrimSpace(s.BaseUrl + el.ChildAttr("a", "href")),
+							InStock: isInstock,
+							Price:   price,
+							Source:  s.Name,
+							Img:     strings.TrimSpace("https:" + el.ChildAttr("img", "src")),
+						})
+					}
+				}
 			}
 		})
 	})
