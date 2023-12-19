@@ -48,7 +48,6 @@ func (s Store) Scrap(searchStr string) ([]scrapper.Card, error) {
 			if isInstock {
 				el.ForEach("select.product-form__variants[name=\"id\"] option", func(_ int, el2 *colly.HTMLElement) {
 					if el2.Attr("data-available") != "0" && el2.Attr("data-price") != "" {
-						// price
 						priceStr := el2.Attr("data-price")
 
 						priceStr = strings.Replace(priceStr, "$", "", -1)
@@ -63,6 +62,7 @@ func (s Store) Scrap(searchStr string) ([]scrapper.Card, error) {
 								Price:   price,
 								Source:  s.Name,
 								Img:     strings.TrimSpace("https:" + el.ChildAttr("img", "src")),
+								Quality: strings.TrimSpace(el2.Text),
 							})
 						}
 					}

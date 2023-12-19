@@ -7,6 +7,7 @@ type Card struct {
 	Price   float64 `json:"price"`
 	InStock bool    `json:"inStock"`
 	Source  string  `json:"src"`
+	Quality string  `json:"quality"`
 }
 
 type Scrapper interface {
