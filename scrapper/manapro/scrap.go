@@ -45,27 +45,27 @@ func (s Store) Scrap(searchStr string) ([]scrapper.Card, error) {
 				isInstock = el.ChildTexts("a.addToCart span.value")[len(el.ChildTexts("a.addToCart span.value"))-1] != "SOLD OUT"
 			}
 
-			// price
-			var priceStr string
+			if isInstock {
+				el.ForEach("select.product-form__variants[name=\"id\"] option", func(_ int, el2 *colly.HTMLElement) {
+					if el2.Attr("data-available") != "0" && el2.Attr("data-price") != "" {
+						// price
+						priceStr := el2.Attr("data-price")
 
-			if strings.TrimSpace(el.ChildText("span.qv-discountprice")) != "" {
-				priceStr = el.ChildText("span.qv-discountprice")
-			} else {
-				priceStr = el.ChildText("span.qv-regularprice")
-			}
+						priceStr = strings.Replace(priceStr, "$", "", -1)
+						priceStr = strings.Replace(priceStr, ",", "", -1)
+						price, _ = strconv.ParseFloat(strings.TrimSpace(priceStr), 64)
 
-			priceStr = strings.Replace(priceStr, "$", "", -1)
-			priceStr = strings.Replace(priceStr, ",", "", -1)
-			price, _ = strconv.ParseFloat(priceStr, 64)
-
-			if price > 0 {
-				cards = append(cards, scrapper.Card{
-					Name:    strings.TrimSpace(el.ChildText("div.grid-view-item__title")),
-					Url:     strings.TrimSpace(s.BaseUrl + el.ChildAttr("a", "href")),
-					InStock: isInstock,
-					Price:   price,
-					Source:  s.Name,
-					Img:     strings.TrimSpace("https:" + el.ChildAttr("img", "src")),
+						if price > 0 {
+							cards = append(cards, scrapper.Card{
+								Name:    strings.TrimSpace(el.ChildText("div.grid-view-item__title")),
+								Url:     strings.TrimSpace(s.BaseUrl + el.ChildAttr("a", "href")),
+								InStock: isInstock,
+								Price:   price,
+								Source:  s.Name,
+								Img:     strings.TrimSpace("https:" + el.ChildAttr("img", "src")),
+							})
+						}
+					}
 				})
 			}
 		})
