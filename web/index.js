@@ -177,18 +177,18 @@ function onFormSubmit(event) {
                                 && result["data"][i].hasOwnProperty("price")
                                 && result["data"][i].hasOwnProperty("src")) {
                                 let h = `
-                                          <div class="col-lg-3 col-6 mb-3">
-                                            <div class="text-center">
-                                              <a href="`+result["data"][i]["url"]+`" target="_blank">
-                                                <img src="`+result["data"][i]["img"]+`" loading="lazy" class="img-fluid img-thumbnail bg-dark" alt="`+result["data"][i]["name"]+`"/>
-                                              </a>
-                                            </div>
-                                            <div class="text-center">
-                                              <div><strong>`+result["data"][i]["name"]+`</strong></div>
-                                              <div>S$ `+result["data"][i]["price"].toFixed(2)+`</div>
-                                              <div><a href="`+result["data"][i]["url"]+`" target="_blank">`+result["data"][i]["src"]+`</a></div>
-                                            </div>
-                                          </div>`;
+                                  <div class="col-lg-3 col-6 mb-3">
+                                    <div class="text-center">
+                                      <a href="`+result["data"][i]["url"]+`" target="_blank">
+                                        <img src="`+result["data"][i]["img"]+`" loading="lazy" class="img-fluid img-thumbnail bg-dark" alt="`+result["data"][i]["name"]+`"/>
+                                      </a>
+                                    </div>
+                                    <div class="text-center">
+                                      <div><strong>`+result["data"][i]["name"]+`</strong></div>
+                                      <div>S$ `+result["data"][i]["price"].toFixed(2)+`</div>
+                                      <div><a href="`+result["data"][i]["url"]+`" target="_blank">`+result["data"][i]["src"]+`</a></div>
+                                    </div>
+                                  </div>`;
                                 html += h
                                 resultCount++;
                             }
