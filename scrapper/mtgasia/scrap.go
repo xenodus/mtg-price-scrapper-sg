@@ -62,6 +62,10 @@ func (s Store) Scrap(searchStr string) ([]scrapper.Card, error) {
 			})
 
 			if isInstock {
+				if el.ChildText("span.foilText") != "" {
+					quality += " " + el.ChildText("span.foilText")
+				}
+
 				cards = append(cards, scrapper.Card{
 					Name:    strings.TrimSpace(el.ChildText("span.missingText")),
 					Url:     searchURL,
