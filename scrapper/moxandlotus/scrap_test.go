@@ -8,7 +8,7 @@ import (
 
 func Test_Scrap(t *testing.T) {
 	s := NewScrapper()
-	result, err := s.Scrap("Abrade")
+	result, err := s.Scrap("Sol Ring")
 	require.NoError(t, err)
 	require.True(t, len(result) > 0)
 }

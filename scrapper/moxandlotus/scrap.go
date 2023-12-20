@@ -117,7 +117,6 @@ func (s Store) Scrap(searchStr string) ([]scrapper.Card, error) {
 		cards       []scrapper.Card
 	)
 
-	searchURL := s.BaseUrl + s.SearchUrl + url.QueryEscape(searchStr)
 	apiURL := s.BaseUrl + StoreApiURL + url.QueryEscape(searchStr)
 
 	resp, err := http.Get(apiURL)
@@ -137,20 +136,28 @@ func (s Store) Scrap(searchStr string) ([]scrapper.Card, error) {
 
 	if len(apiResponse.Data) > 0 {
 		for _, card := range apiResponse.Data {
-			price, _ := strconv.ParseFloat(strings.TrimSpace(card.Price), 64)
-			cardNo, err := strconv.Atoi(card.CardNumber)
-			if err != nil {
-				continue
-			}
+			if len(card.Conditions) > 0 {
+				for _, cardWithCondition := range card.Conditions {
+					if cardWithCondition.Stocks > 0 {
+						url := fmt.Sprintf(StoreBaseURL+"/view/%s/%v", strings.ToLower(card.ExpansionCode), card.ID)
+						price, _ := strconv.ParseFloat(strings.TrimSpace(card.Price), 64)
+						cardNo, err := strconv.Atoi(card.CardNumber)
+						if err != nil {
+							continue
+						}
 
-			cards = append(cards, scrapper.Card{
-				Name:    strings.TrimSpace(card.Title),
-				Url:     searchURL,
-				InStock: true,
-				Price:   price,
-				Source:  s.Name,
-				Img:     fmt.Sprintf(CardImageURL, card.ExpansionCode, fmt.Sprintf("%03d", cardNo)),
-			})
+						cards = append(cards, scrapper.Card{
+							Name:    strings.TrimSpace(card.Title),
+							Url:     url,
+							InStock: true,
+							Price:   price,
+							Source:  s.Name,
+							Img:     fmt.Sprintf(CardImageURL, card.ExpansionCode, fmt.Sprintf("%03d", cardNo)),
+							Quality: cardWithCondition.Code,
+						})
+					}
+				}
+			}
 		}
 	}
 
