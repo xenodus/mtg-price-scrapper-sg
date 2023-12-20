@@ -140,7 +140,7 @@ func (s Store) Scrap(searchStr string) ([]scrapper.Card, error) {
 				for _, cardWithCondition := range card.Conditions {
 					if cardWithCondition.Stocks > 0 {
 						url := fmt.Sprintf(StoreBaseURL+"/view/%s/%v", strings.ToLower(card.ExpansionCode), card.ID)
-						price, _ := strconv.ParseFloat(strings.TrimSpace(card.Price), 64)
+						price, _ := strconv.ParseFloat(strings.TrimSpace(cardWithCondition.Price), 64)
 						cardNo, err := strconv.Atoi(card.CardNumber)
 						if err != nil {
 							continue

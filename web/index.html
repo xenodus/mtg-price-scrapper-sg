@@ -23,7 +23,7 @@
     <script src="https://unpkg.com/feather-icons"></script>
 </head>
 <body>
-    <div id="top" class="container-xl my-3 px-3">
+    <div id="top" class="container-xl my-3 px-3 pb-3">
         <div class="mb-3 text-center">
             <div class="d-flex flex-row align-items-center justify-content-center mb-1">
                 <div>
@@ -36,21 +36,21 @@
                 <h4 class="fw-medium">- Gishath Fetch -<br/>Magic: The Gathering Price Checker for Singapore's LGS</h4>
             </div>
         </div>
-        <div class="mb-3">
+        <div>
             <form id="searchForm">
                 <div class="mb-3 form-floating">
                     <input type="text" class="form-control" id="search" placeholder="lightning bolt">
                     <label for="search">Card Name</label>
                 </div>
                 <div class="mb-3" id="lgsCheckboxes"></div>
-                <div class="mb-3 d-grid">
+                <div class="mb-2 d-grid">
                     <button id="submitBtn" type="submit" class="btn btn-primary">Search</button>
                 </div>
             </form>
         </div>
         <div id="resultCount" class="mb-3 text-center bg-warning-subtle text-dark rounded"></div>
         <div id="result" class="mb-3 text-center"></div>
-        <div class="text-center mb-5 fs-6">
+        <div class="text-center mb-3 fs-6">
             &copy; 2023 gishathfetch.com<br/>by <a href="https://github.com/xenodus" target="_blank">xenodus</a>
         </div>
     </div>
@@ -100,7 +100,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <div class="mb-3">
+                        <div class="mb-4">
                             <ol style="padding-left: 1rem;">
                                 <li><a href="#faq-q1" class="link-offset-2">How does Gishath Fetch work?</a></li>
                                 <li><a href="#faq-q2" class="link-offset-2">Why is Gishath Fetch so slow?</a></li>
