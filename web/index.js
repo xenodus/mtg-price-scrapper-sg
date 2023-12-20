@@ -15,6 +15,7 @@ const lgsOptions = [
     "Hideout",
     "Mana Pro",
     "Mox & Lotus",
+    "MTG Asia",
     "OneMtg",
     "Sanctuary Gaming"
 ];
@@ -180,7 +181,7 @@ function onFormSubmit(event) {
                                   <div class="col-lg-3 col-6 mb-4">
                                     <div class="text-center mb-2">
                                       <a href="`+result["data"][i]["url"]+`" target="_blank">
-                                        <img src="`+result["data"][i]["img"]+`" loading="lazy" class="img-fluid w-100" alt="`+result["data"][i]["name"]+`"/>
+                                        <img src="`+(result["data"][i]["img"]===""?`https://placehold.co/304x424?text=`+result["data"][i]["name"]:result["data"][i]["img"])+`" loading="lazy" class="img-fluid w-100" alt="`+result["data"][i]["name"]+`"/>
                                       </a>
                                     </div>
                                     <div class="text-center">

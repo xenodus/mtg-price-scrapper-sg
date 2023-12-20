@@ -24,6 +24,7 @@ import (
 	"mtg-price-scrapper-sg/scrapper/hideout"
 	"mtg-price-scrapper-sg/scrapper/manapro"
 	"mtg-price-scrapper-sg/scrapper/moxandlotus"
+	"mtg-price-scrapper-sg/scrapper/mtgasia"
 	"mtg-price-scrapper-sg/scrapper/onemtg"
 	"mtg-price-scrapper-sg/scrapper/sanctuary"
 )
@@ -151,6 +152,7 @@ func initAndMapScrappers(lgs []string) map[string]scrapper.Scrapper {
 		hideout.StoreName:      hideout.NewScrapper(),
 		manapro.StoreName:      manapro.NewScrapper(),
 		moxandlotus.StoreName:  moxandlotus.NewScrapper(),
+		mtgasia.StoreName:      mtgasia.NewScrapper(),
 		onemtg.StoreName:       onemtg.NewScrapper(),
 		sanctuary.StoreName:    sanctuary.NewScrapper(),
 	}
