@@ -90,18 +90,18 @@ const mapDivBody = document.getElementById("map").getElementsByClassName("modal-
 let mapListHtml = "";
 let mapItemsHtml = "";
 let topBtnHtml = `<a href="#map-list" class="btn btn-primary" role="button">Back to top</a>`;
-let closeBtnHtml = `<button type="button" class="btn btn-secondary" style="margin-left: 5px;" data-bs-dismiss="modal">Close</button>`;
+let closeBtnHtml = `<button type="button" class="btn btn-secondary" style="margin-left: 7px;" data-bs-dismiss="modal">Close</button>`;
 
 // Menu
-mapListHtml += `<div><ul>`;
+mapListHtml += `<div class="mb-4"><ul style="padding-left: 1rem">`;
 for(let i = 0; i < lgsMap.length; i++) {
-    mapListHtml += `<li><a href="#`+lgsMap[i].id+`">`+lgsMap[i].name+`</a></li>`;
+    mapListHtml += `<li><a href="#`+lgsMap[i].id+`" class="link-offset-2" alt="`+lgsMap[i].name+`">`+lgsMap[i].name+`</a></li>`;
     mapItemsHtml += `
-        <div id="`+lgsMap[i].id+`" class="mb-3 map-item">
+        <div id="`+lgsMap[i].id+`" class="mb-4 map-item">
             <h5>`+lgsMap[i].name+`</h5>
             <div class="mb-2">`+lgsMap[i].address+`</div>
             <iframe class="w-100 h-100 border border-dark mb-3" src="`+lgsMap[i].iframe+`" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-            <div>`+topBtnHtml+(i==lgsMap.length-1?closeBtnHtml:``)+`</div>
+            <div>`+topBtnHtml+closeBtnHtml+`</div>
         </div>    
     `;
 }
