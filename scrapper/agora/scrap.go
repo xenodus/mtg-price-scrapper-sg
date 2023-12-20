@@ -38,6 +38,7 @@ func (s Store) Scrap(searchStr string) ([]scrapper.Card, error) {
 			var (
 				isInstock bool
 				price     float64
+				quality   string
 			)
 
 			// in stock
@@ -51,6 +52,13 @@ func (s Store) Scrap(searchStr string) ([]scrapper.Card, error) {
 			priceStr = strings.Replace(priceStr, ",", "", -1)
 			price, _ = strconv.ParseFloat(strings.TrimSpace(priceStr), 64)
 
+			// quality
+			qualityStr := el.ChildText("div.store-item-cat")
+			qualityStrSlice := strings.Split(qualityStr, " - ")
+			if len(qualityStrSlice) == 2 {
+				quality = strings.TrimSpace(qualityStrSlice[1])
+			}
+
 			// name
 			name := el.ChildText("div.store-item-title")
 
@@ -63,6 +71,7 @@ func (s Store) Scrap(searchStr string) ([]scrapper.Card, error) {
 					Price:   price,
 					Source:  s.Name,
 					Img:     strings.TrimSpace(el.ChildAttr("div.store-item-img", "data-img")),
+					Quality: quality,
 				})
 			}
 		})
