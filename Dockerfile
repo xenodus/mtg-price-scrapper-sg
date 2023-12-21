@@ -3,6 +3,8 @@ WORKDIR /mtg-price-scrapper
 # Copy dependencies list
 COPY go.mod go.sum ./
 COPY scrapper ./scrapper
+COPY handler ./handler
+COPY pkg ./pkg
 COPY main.go .
 RUN go mod download
 # Build
