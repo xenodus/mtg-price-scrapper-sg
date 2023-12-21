@@ -53,7 +53,7 @@ func (s Store) Scrap(searchStr string) ([]scrapper.Card, error) {
 						if price > 0 {
 							cards = append(cards, scrapper.Card{
 								Name:    strings.TrimSpace(el.ChildText("p.productTitle")),
-								Url:     strings.TrimSpace(s.BaseUrl + el.ChildAttr("a", "href")),
+								Url:     strings.TrimSpace(s.BaseUrl + strings.Replace(el.ChildAttr("a", "href"), "/products/", "products/", -1)),
 								InStock: isInstock,
 								Price:   price,
 								Source:  s.Name,
