@@ -53,7 +53,7 @@ func LambdaHandler(_ context.Context, request events.APIGatewayProxyRequest) (ev
 		lgsString, _ = url.QueryUnescape("Flagship%20Games%2CGames%20Haven%2CGrey%20Ogre%20Games%2CHideout%2CMana%20Pro%2CMox%20%26%20Lotus%2COneMtg%2CSanctuary%20Gaming")
 	}
 
-	if searchString == "" {
+	if searchString == "" || len(searchString) < 3 {
 		apiRes.StatusCode = http.StatusBadRequest
 		return lambdaApiResponse(apiRes, webRes)
 	}

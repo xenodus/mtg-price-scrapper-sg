@@ -119,7 +119,7 @@ function onFormSubmit(event) {
     let searchStr = searchInput.value.trim()
 
     // End if empty search str
-    if (searchStr === "") {
+    if (searchStr === "" || searchStr.length < 3) {
         return
     }
 
