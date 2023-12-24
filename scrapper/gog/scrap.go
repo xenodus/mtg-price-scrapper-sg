@@ -101,11 +101,14 @@ func (s Store) Scrap(searchStr string) ([]scrapper.Card, error) {
 	}
 
 	if len(pagesMap) > 0 {
-		log.Println("Pagination exists for "+s.Name+": ", pagesMap)
+		log.Println("Pagination exists for "+s.Name+": ", len(pagesMap))
+
+		c2 := colly.NewCollector(
+			colly.Async(true),
+		)
 
 		for _, url := range pagesMap {
 			searchURL = s.BaseUrl + url
-			c2 := colly.NewCollector()
 
 			c2.OnHTML("div.collectionGrid", func(e *colly.HTMLElement) {
 				e.ForEach("div.productCard__card", func(_ int, el *colly.HTMLElement) {
@@ -151,6 +154,7 @@ func (s Store) Scrap(searchStr string) ([]scrapper.Card, error) {
 				break
 			}
 		}
+		c2.Wait()
 	}
 
 	return cards, err
