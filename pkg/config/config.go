@@ -1,3 +1,6 @@
 package config
 
-const IsTestEnv = false
+const (
+	IsTestEnv        = false
+	MaxPagesToSearch = 5
+)

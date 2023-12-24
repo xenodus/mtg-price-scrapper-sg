@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/gocolly/colly/v2"
+	"mtg-price-scrapper-sg/pkg/config"
 	"mtg-price-scrapper-sg/scrapper"
 )
 
@@ -101,13 +102,15 @@ func (s Store) Scrap(searchStr string) ([]scrapper.Card, error) {
 	}
 
 	if len(pagesMap) > 0 {
-		log.Println("Pagination exists for "+s.Name+": ", len(pagesMap))
+		log.Println("Pagination exists for " + s.Name + ": ")
 
 		c2 := colly.NewCollector(
 			colly.Async(true),
 		)
 
-		for _, url := range pagesMap {
+		var i = 1
+		for page, url := range pagesMap {
+			i++
 			searchURL = s.BaseUrl + url
 
 			c2.OnHTML("div.collectionGrid", func(e *colly.HTMLElement) {
@@ -149,8 +152,15 @@ func (s Store) Scrap(searchStr string) ([]scrapper.Card, error) {
 				})
 			})
 
+			log.Println("Searching page no: ", page)
+
 			err = c2.Visit(searchURL)
 			if err != nil {
+				break
+			}
+
+			// Application's max page limit
+			if i >= config.MaxPagesToSearch {
 				break
 			}
 		}
