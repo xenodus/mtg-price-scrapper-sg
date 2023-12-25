@@ -21,6 +21,11 @@ type Store struct {
 	SearchUrl string
 }
 
+type pagination struct {
+	last int
+	url  string
+}
+
 func NewScrapper() scrapper.Scrapper {
 	return Store{
 		Name:      StoreName,
@@ -35,7 +40,7 @@ func (s Store) Scrap(searchStr string) ([]scrapper.Card, error) {
 		cards []scrapper.Card
 	)
 
-	pagesMap := make(map[int]string)
+	pagination := new(pagination)
 	searchURL := s.BaseUrl + s.SearchUrl + url.QueryEscape(searchStr)
 
 	c := colly.NewCollector()
@@ -52,7 +57,8 @@ func (s Store) Scrap(searchStr string) ([]scrapper.Card, error) {
 			if elStr != "" && elStr != "1" && el.ChildAttr("a", "href") != "" {
 				elInt, strConvErr := strconv.Atoi(elStr)
 				if strConvErr == nil {
-					pagesMap[elInt] = el.ChildAttr("a", "href")
+					pagination.last = elInt
+					pagination.url = el.ChildAttr("a", "href")
 				}
 			}
 		})
@@ -101,17 +107,13 @@ func (s Store) Scrap(searchStr string) ([]scrapper.Card, error) {
 		return []scrapper.Card{}, err
 	}
 
-	if len(pagesMap) > 0 {
-		log.Println("Pagination exists for " + s.Name + ": ")
+	if pagination.url != "" {
+		log.Println("Pagination exists for " + s.Name)
 
-		c2 := colly.NewCollector(
-			colly.Async(true),
-		)
+		c2 := colly.NewCollector()
 
-		var i = 1
-		for page, url := range pagesMap {
-			i++
-			searchURL = s.BaseUrl + url
+		for i := 2; i <= pagination.last; i++ {
+			searchURL = s.BaseUrl + strings.Replace(pagination.url, "page="+strconv.Itoa(pagination.last), "page="+strconv.Itoa(i), 1)
 
 			c2.OnHTML("div.collectionGrid", func(e *colly.HTMLElement) {
 				e.ForEach("div.productCard__card", func(_ int, el *colly.HTMLElement) {
@@ -152,7 +154,8 @@ func (s Store) Scrap(searchStr string) ([]scrapper.Card, error) {
 				})
 			})
 
-			log.Println("Searching page no: ", page)
+			log.Println("Searching page no: ", i)
+			log.Println(searchURL)
 
 			err = c2.Visit(searchURL)
 			if err != nil {
@@ -164,7 +167,6 @@ func (s Store) Scrap(searchStr string) ([]scrapper.Card, error) {
 				break
 			}
 		}
-		c2.Wait()
 	}
 
 	return cards, err
