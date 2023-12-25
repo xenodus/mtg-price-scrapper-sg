@@ -4,6 +4,7 @@ WORKDIR /mtg-price-scrapper
 COPY go.mod go.sum ./
 COPY scrapper ./scrapper
 COPY handler ./handler
+COPY controller ./controller
 COPY pkg ./pkg
 COPY main.go .
 RUN go mod download

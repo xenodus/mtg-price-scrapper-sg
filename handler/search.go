@@ -3,16 +3,13 @@ package handler
 import (
 	"context"
 	"encoding/json"
-	"fmt"
-	"log"
 	"net/http"
 	"net/url"
 	"slices"
-	"sort"
 	"strings"
-	"time"
 
 	"github.com/aws/aws-lambda-go/events"
+	"mtg-price-scrapper-sg/controller"
 	"mtg-price-scrapper-sg/pkg/config"
 	"mtg-price-scrapper-sg/scrapper"
 	"mtg-price-scrapper-sg/scrapper/agora"
@@ -33,8 +30,7 @@ type WebResponse struct {
 	Data []scrapper.Card `json:"data"`
 }
 
-func LambdaHandler(_ context.Context, request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
-	var cards, inStockCards []scrapper.Card
+func Search(_ context.Context, request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	var apiRes events.APIGatewayProxyResponse
 	var webRes WebResponse
 	var lgs []string
@@ -62,55 +58,11 @@ func LambdaHandler(_ context.Context, request events.APIGatewayProxyRequest) (ev
 		lgs = strings.Split(lgsString, ",")
 	}
 
-	shopScrapperMap := initAndMapScrappers(lgs)
+	inStockCards, _ := controller.Search(searchString, lgs)
 
-	if len(shopScrapperMap) > 0 {
-		// Create a channel with a buffer size of shopScrapperMap
-		done := make(chan bool, len(shopScrapperMap))
-
-		log.Println("Start checking shops...")
-		for shopName, shopScrapper := range shopScrapperMap {
-			shopName := shopName
-			shopScrapper := shopScrapper
-			go func() {
-				start := time.Now()
-				c, _ := shopScrapper.Scrap(searchString)
-				log.Println(fmt.Sprintf("Done: %s. Took: %s", shopName, time.Since(start)))
-
-				if len(c) > 0 {
-					cards = append(cards, c...)
-				}
-
-				// Signal that the goroutine is done
-				done <- true
-			}()
-		}
-
-		// Wait for all goroutines to finish
-		for i := 0; i < len(shopScrapperMap); i++ {
-			<-done
-		}
-		log.Println("End checking shops...")
-
+	if len(inStockCards) > 0 {
 		apiRes.StatusCode = http.StatusOK
-
-		if len(cards) > 0 {
-			// Sort by price ASC
-			sort.SliceStable(cards, func(i, j int) bool {
-				return cards[i].Price < cards[j].Price
-			})
-
-			// Only showing in stock, contains searched string and not art card
-			for _, c := range cards {
-				if c.InStock && strings.Contains(strings.ToLower(c.Name), strings.ToLower(searchString)) && !strings.Contains(strings.ToLower(c.Name), "art card") {
-					inStockCards = append(inStockCards, c)
-				}
-			}
-
-			if len(inStockCards) > 0 {
-				webRes.Data = inStockCards
-			}
-		}
+		webRes.Data = inStockCards
 	}
 
 	return lambdaApiResponse(apiRes, webRes)

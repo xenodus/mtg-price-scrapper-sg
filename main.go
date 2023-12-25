@@ -15,9 +15,9 @@ import (
 func main() {
 	if config.IsTestEnv {
 		start := time.Now()
-		log.Println(handler.LambdaHandler(context.Background(), events.APIGatewayProxyRequest{}))
+		log.Println(handler.Search(context.Background(), events.APIGatewayProxyRequest{}))
 		log.Println(fmt.Sprintf("Took: %s", time.Since(start)))
 	} else {
-		lambda.Start(handler.LambdaHandler)
+		lambda.Start(handler.Search)
 	}
 }
