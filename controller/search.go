@@ -23,10 +23,15 @@ import (
 	"mtg-price-scrapper-sg/scrapper/sanctuary"
 )
 
-func Search(searchString string, lgs []string) ([]scrapper.Card, error) {
-	var cards, inStockCards []scrapper.Card
+type SearchInput struct {
+	SearchString string
+	Lgs          []string
+}
 
-	shopScrapperMap := initAndMapScrappers(lgs)
+func Search(input SearchInput) ([]scrapper.Card, error) {
+	var cards, inStockCards, inStockExactMatchCards, inStockPartialMatchCards []scrapper.Card
+
+	shopScrapperMap := initAndMapScrappers(input.Lgs)
 
 	if len(shopScrapperMap) > 0 {
 		// Create a channel with a buffer size of shopScrapperMap
@@ -38,7 +43,7 @@ func Search(searchString string, lgs []string) ([]scrapper.Card, error) {
 			shopScrapper := shopScrapper
 			go func() {
 				start := time.Now()
-				c, _ := shopScrapper.Scrap(searchString)
+				c, _ := shopScrapper.Scrap(input.SearchString)
 				log.Println(fmt.Sprintf("Done: %s. Took: %s", shopName, time.Since(start)))
 
 				if len(c) > 0 {
@@ -64,10 +69,25 @@ func Search(searchString string, lgs []string) ([]scrapper.Card, error) {
 
 			// Only showing in stock, contains searched string and not art card
 			for _, c := range cards {
-				if c.InStock && strings.Contains(strings.ToLower(c.Name), strings.ToLower(searchString)) && !strings.Contains(strings.ToLower(c.Name), "art card") {
-					inStockCards = append(inStockCards, c)
+				if c.InStock && strings.Contains(strings.ToLower(c.Name), strings.ToLower(input.SearchString)) && !strings.Contains(strings.ToLower(c.Name), "art card") {
+					if strings.ToLower(c.Name) == strings.ToLower(input.SearchString) {
+						inStockExactMatchCards = append(inStockExactMatchCards, c)
+						continue
+					}
+					// fall back check for exact card name
+					cardNameSlice := strings.Split(c.Name, " ")
+					if len(cardNameSlice) > 1 {
+						if strings.ToLower(cardNameSlice[0]) == strings.ToLower(input.SearchString) {
+							inStockExactMatchCards = append(inStockExactMatchCards, c)
+							continue
+						}
+					}
+
+					inStockPartialMatchCards = append(inStockPartialMatchCards, c)
 				}
 			}
+
+			inStockCards = append(inStockExactMatchCards, inStockPartialMatchCards...)
 		}
 	}
 	return inStockCards, nil

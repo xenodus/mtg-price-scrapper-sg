@@ -2,5 +2,5 @@ package config
 
 const (
 	IsTestEnv        = false
-	MaxPagesToSearch = 5
+	MaxPagesToSearch = 3
 )
