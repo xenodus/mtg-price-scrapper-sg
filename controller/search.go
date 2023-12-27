@@ -29,7 +29,7 @@ type SearchInput struct {
 }
 
 func Search(input SearchInput) ([]scrapper.Card, error) {
-	var cards, inStockCards, inStockExactMatchCards, inStockPartialMatchCards []scrapper.Card
+	var cards, inStockCards, inStockExactMatchCards, inStockPartialMatchCards, inStockPrefixMatchCards []scrapper.Card
 
 	shopScrapperMap := initAndMapScrappers(input.Lgs)
 
@@ -69,7 +69,14 @@ func Search(input SearchInput) ([]scrapper.Card, error) {
 
 			// Only showing in stock, contains searched string and not art card
 			for _, c := range cards {
-				if c.InStock && strings.Contains(strings.ToLower(c.Name), strings.ToLower(input.SearchString)) && !strings.Contains(strings.ToLower(c.Name), "art card") {
+				if c.InStock && !strings.Contains(strings.ToLower(c.Name), "art card") {
+					// todo: make this configurable
+					// increase accuracy by only including cards which contains searched string in names
+					if !strings.Contains(strings.ToLower(c.Name), strings.ToLower(input.SearchString)) {
+						continue
+					}
+
+					// exact match
 					if strings.ToLower(c.Name) == strings.ToLower(input.SearchString) {
 						inStockExactMatchCards = append(inStockExactMatchCards, c)
 						continue
@@ -83,11 +90,19 @@ func Search(input SearchInput) ([]scrapper.Card, error) {
 						}
 					}
 
+					if strings.HasPrefix(strings.ToLower(c.Name), strings.ToLower(input.SearchString)) {
+						inStockPrefixMatchCards = append(inStockPrefixMatchCards, c)
+						continue
+					}
+
 					inStockPartialMatchCards = append(inStockPartialMatchCards, c)
 				}
 			}
 
-			inStockCards = append(inStockExactMatchCards, inStockPartialMatchCards...)
+			// order of results: exact > prefix > partial match
+			inStockCards = append(inStockExactMatchCards, inStockPrefixMatchCards...)
+			inStockCards = append(inStockCards, inStockPartialMatchCards...)
+
 		}
 	}
 	return inStockCards, nil
