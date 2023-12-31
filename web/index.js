@@ -125,7 +125,7 @@ function onFormSubmit(event) {
 
     // Tag search str
     gtag('event', 'search', {
-        'search_term': searchStr
+        'search_term': searchStr.toLowerCase()
     });
 
     let lgsSelected = [];
@@ -202,7 +202,7 @@ function onFormSubmit(event) {
 
                 // Tag search str
                 gtag('event', 'view_search_results', {
-                    'search_term': searchStr
+                    'search_term': searchStr.toLowerCase()
                 });
 
             } else {
