@@ -70,19 +70,33 @@ func Search(input SearchInput) ([]scrapper.Card, error) {
 			// Only showing in stock, contains searched string and not art card
 			for _, c := range cards {
 				if c.InStock && !strings.Contains(strings.ToLower(c.Name), "art card") {
+					cleanCardName := c.Name
+
+					// if string has [, get index of it to strip [*] away
+					squareBracketIndex := strings.Index(cleanCardName, "[")
+					if squareBracketIndex > 1 {
+						cleanCardName = strings.TrimSpace(cleanCardName[:squareBracketIndex-1])
+					}
+
+					// if string has (, get index of it to strip (*) away
+					roundBracketIndex := strings.Index(cleanCardName, "(")
+					if roundBracketIndex > 1 {
+						cleanCardName = strings.TrimSpace(cleanCardName[:roundBracketIndex-1])
+					}
+
 					// todo: make this configurable
 					// increase accuracy by only including cards which contains searched string in names
-					if !strings.Contains(strings.ToLower(c.Name), strings.ToLower(input.SearchString)) {
+					if !strings.Contains(strings.ToLower(cleanCardName), strings.ToLower(input.SearchString)) {
 						continue
 					}
 
 					// exact match
-					if strings.ToLower(c.Name) == strings.ToLower(input.SearchString) {
+					if strings.ToLower(cleanCardName) == strings.ToLower(input.SearchString) {
 						inStockExactMatchCards = append(inStockExactMatchCards, c)
 						continue
 					}
 					// fall back check for exact card name
-					cardNameSlice := strings.Split(c.Name, " ")
+					cardNameSlice := strings.Split(cleanCardName, " ")
 					if len(cardNameSlice) > 1 {
 						if strings.ToLower(cardNameSlice[0]) == strings.ToLower(input.SearchString) {
 							inStockExactMatchCards = append(inStockExactMatchCards, c)
@@ -90,7 +104,7 @@ func Search(input SearchInput) ([]scrapper.Card, error) {
 						}
 					}
 
-					if strings.HasPrefix(strings.ToLower(c.Name), strings.ToLower(input.SearchString)) {
+					if strings.HasPrefix(strings.ToLower(cleanCardName), strings.ToLower(input.SearchString)) {
 						inStockPrefixMatchCards = append(inStockPrefixMatchCards, c)
 						continue
 					}
