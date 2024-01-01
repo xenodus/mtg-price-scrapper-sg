@@ -84,7 +84,6 @@ func Search(input SearchInput) ([]scrapper.Card, error) {
 						cleanCardName = strings.TrimSpace(cleanCardName[:roundBracketIndex-1])
 					}
 
-					// todo: make this configurable
 					// increase accuracy by only including cards which contains searched string in names
 					/*
 						if !strings.Contains(strings.ToLower(cleanCardName), strings.ToLower(input.SearchString)) {
