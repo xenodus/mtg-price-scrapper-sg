@@ -86,9 +86,11 @@ func Search(input SearchInput) ([]scrapper.Card, error) {
 
 					// todo: make this configurable
 					// increase accuracy by only including cards which contains searched string in names
-					if !strings.Contains(strings.ToLower(cleanCardName), strings.ToLower(input.SearchString)) {
-						continue
-					}
+					/*
+						if !strings.Contains(strings.ToLower(cleanCardName), strings.ToLower(input.SearchString)) {
+							continue
+						}
+					*/
 
 					// exact match
 					if strings.ToLower(cleanCardName) == strings.ToLower(input.SearchString) {
