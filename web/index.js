@@ -1,3 +1,4 @@
+const pageTitle = "Gishath Fetch: MTG Price Checker for Singapore's LGS";
 const form = document.getElementById("searchForm");
 const lgsCheckboxesDiv = document.getElementById("lgsCheckboxes");
 const searchInput = document.getElementById("search");
@@ -20,28 +21,44 @@ const lgsOptions = [
     "Sanctuary Gaming"
 ];
 let timeouts = [];
+let baseUrl = "https://gishathfetch.com/";
 let apiBaseUrl = "https://api.gishathfetch.com/";
 
 if (window.location.hostname === "staging.gishathfetch.com") {
+    baseUrl = "https://staging.gishathfetch.com/";
     apiBaseUrl = "https://staging-api.gishathfetch.com/";
 }
 
-feather.replace();
 setupConfig();
-
-form.addEventListener("submit", onFormSubmit);
-
-document.addEventListener("keypress", function(event) {
-    if (event.keyCode === 13) {
-        event.preventDefault();
-        submitBtn.click();
-    }
-});
 
 // Pre-select checkboxes and pre-fill search from cookie
 function setupConfig() {
+    feather.replace();
     appendLgsCheckboxes();
     fillSearch();
+    setupEventListeners();
+    onloadSearch();
+}
+
+function onloadSearch() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const searchParam = urlParams.get('s');
+
+    if (searchParam !== "") {
+        searchInput.value = searchParam;
+        submitBtn.click();
+    }
+}
+
+function setupEventListeners() {
+    form.addEventListener("submit", onFormSubmit);
+
+    document.addEventListener("keypress", function(event) {
+        if (event.keyCode === 13) {
+            event.preventDefault();
+            submitBtn.click();
+        }
+    });
 }
 
 function fillSearch() {
@@ -113,6 +130,11 @@ function resetSubmitBtn() {
     submitBtn.disabled = false;
 }
 
+function updatePageUrlTitle(searchStr, url) {
+    window.history.pushState(searchStr.toLowerCase(), searchStr.toLowerCase() + " | " + pageTitle, url);
+    document.title = searchStr.toLowerCase() + " | " + pageTitle;
+}
+
 function onFormSubmit(event) {
     event.preventDefault();
 
@@ -149,7 +171,8 @@ function onFormSubmit(event) {
     resetResult();
 
     let request = new XMLHttpRequest();
-    let searchUrl = apiBaseUrl + "?s="+encodeURIComponent(searchStr);
+    let searchQueryString = "?s="+encodeURIComponent(searchStr.toLowerCase());
+    let searchUrl = apiBaseUrl + searchQueryString
     searchUrl += "&lgs=" + encodeURIComponent(lgsSelected.join(','));
 
     setCookie(lgsSelected);
@@ -166,10 +189,11 @@ function onFormSubmit(event) {
             // Check the status of the response
             if (request.status === 200) {
                 // Access the data returned by the server
-                var result = JSON.parse(request.responseText);
+                let result = JSON.parse(request.responseText);
                 // Do something with the data
                 if (result.hasOwnProperty("data")) {
                     if (result["data"] !== null && result["data"].length > 0) {
+                        updatePageUrlTitle(searchStr, baseUrl + searchQueryString);
                         let html = `<div class="row">`;
                         for(let i = 0; i < result["data"].length; i++) {
                             if (result["data"][i].hasOwnProperty("url")

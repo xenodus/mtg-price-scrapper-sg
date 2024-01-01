@@ -71,14 +71,14 @@
                     <i data-feather="map" style="width: 14px; margin-right: 3px; position: relative; bottom: 1px;"></i>Map
                 </div>
             </a>
-            <a href="#" data-bs-toggle="modal" data-bs-target="#faq-modal" class="py-1 link-light link-offset-2 link-underline-opacity-0">
+            <a href="#" data-bs-toggle="modal" data-bs-target="#news-modal" class="py-1 link-light link-offset-2 link-underline-opacity-0">
                 <div class="px-3 py-1">
-                    <i data-feather="help-circle" style="width: 14px; margin-right: 3px; position: relative; bottom: 1px;"></i>Help
+                    <i data-feather="file-text" style="width: 14px; margin-right: 3px; position: relative; bottom: 1px;"></i>News
                 </div>
             </a>
-            <a href="#" data-bs-toggle="modal" data-bs-target="#contact-modal" class="py-1 link-light link-offset-2 link-underline-opacity-0">
+            <a href="#" data-bs-toggle="modal" data-bs-target="#faq-modal" class="py-1 link-light link-offset-2 link-underline-opacity-0">
                 <div class="px-3 py-1">
-                    <i data-feather="mail" style="width: 14px; margin-right: 3px; position: relative; bottom: 1px;"></i>Contact
+                    <i data-feather="help-circle" style="width: 14px; margin-right: 3px; position: relative; bottom: 1px;"></i>FAQs
                 </div>
             </a>
             <a href="#top" class="py-1 link-light link-offset-2 link-underline-opacity-0">
@@ -109,101 +109,48 @@
             <div class="modal-dialog modal-xl">
                 <div class="modal-content">
                     <div class="modal-header border-bottom border-dark border-opacity-25">
-                        <h5 id="faq-list" class="modal-title">Help</h5>
+                        <h5 id="faq-list" class="modal-title">FAQs</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <div class="mb-4">
                             <ol style="padding-left: 1rem;">
                                 <li><a href="#faq-q1" class="link-offset-2">How does Gishath Fetch work?</a></li>
-                                <li><a href="#faq-q2" class="link-offset-2">Why is Gishath Fetch slow?</a></li>
-                                <li><a href="#faq-q3" class="link-offset-2">Why aren't images shown for MTG Asia?</a></li>
-                                <li><a href="#faq-q4" class="link-offset-2">Why aren't all results shown?</a></li>
+                                <li><a href="#faq-q2" class="link-offset-2">Is Gishath Fetch free to use?</a></li>
+                                <li><a href="#faq-q3" class="link-offset-2">How do I get in touch?</a></li>
+                                <li><a href="#faq-q4" class="link-offset-2">Why aren't images shown for MTG Asia?</a></li>
+                                <li><a href="#faq-q5" class="link-offset-2">Why aren't all results shown?</a></li>
                             </ol>
                         </div>
                         <div>
-                            <div class="mb-3 pb-3" id="faq-q1">
+                            <div class="mb-4" id="faq-q1">
                                 <div class="q-header"><h5>1. How does Gishath Fetch work?</h5></div>
                                 <div class="q-answer">
-                                    Gishath Fetch searches the different local game stores' (LGS) website for the card name entered, performs filtering of result for higher accuracy and returns the compiled result sorted by price.
+                                    <p>Gishath Fetch searches the selected local game stores' (LGS) website concurrently in the background, performs filtering of result for higher accuracy and returns the compiled result sorted by price.</p>
                                 </div>
                             </div>
-                            <div class="mb-3 pb-3" id="faq-q2">
-                                <div class="q-header"><h5>2. Why is Gishath Fetch slow?</h5></div>
+                            <div class="mb-4" id="faq-q2">
+                                <div class="q-header"><h5>2. Is Gishath Fetch free to use?</h5></div>
                                 <div class="q-answer">
-                                    <p>Different LGSs' websites have varying response times. The overall search time will be held back by the longest/slowest one.</p>
-                                    <p>A sample set of the LGSs' response times are:</p>
-                                    <div class="table-responsive">
-                                        <table class="table table-bordered">
-                                            <thead>
-                                                <tr>
-                                                    <th>LGS</th>
-                                                    <th>Response (s)</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td>Agora Hobby</td>
-                                                    <td>5.479</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Cards Citadel</td>
-                                                    <td>0.496</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Dueller's Point</td>
-                                                    <td>2.336</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Flagship Games</td>
-                                                    <td>1.200</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Games Haven</td>
-                                                    <td>0.936</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Grey Ogre Games</td>
-                                                    <td>0.639</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Hideout</td>
-                                                    <td>0.978</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Mana Pro</td>
-                                                    <td>1.078</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Mox & Lotus</td>
-                                                    <td>1.256</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>MTG Asia</td>
-                                                    <td>1.697</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>OneMtg</td>
-                                                    <td>0.640</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Sanctuary Gaming</td>
-                                                    <td>0.378</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
+                                    <p>Gishath Fetch is build as a project of passion for fellow MTG enthusiasts. There are no plans currently nor in the foreseeable future to paywall it.</p>
+                                    <p>If you would like to support Gishath Fetch monetarily, you may do so via this <a href="https://www.patreon.com/GishathFetch" target="_blank">Patreon</a>.</p>
                                 </div>
                             </div>
-                            <div class="mb-3" id="faq-q3">
-                                <div class="q-header"><h5>3. Why aren't card images shown for MTG Asia?</h5></div>
+                            <div class="mb-4" id="faq-q3">
+                                <div class="q-header"><h5>3. How do I get in touch?</h5></div>
                                 <div class="q-answer">
-                                    MTG Asia's website isn't secured via Hypertext Transfer Protocol Secure (HTTPS) while Gishath Fetch is and as such, the browser will not load the "non-secure" images.
-                                    Instead of displaying broken images, placeholder image with the card name is shown.
+                                    <p>Have a suggestion, want to report a bug or just want to get in touch? Drop an email to <a href="mailto:contact@alvinyeoh.com" target="_blank">contact@alvinyeoh.com</a>.</p>
                                 </div>
                             </div>
-                            <div class="mb-3" id="faq-q4">
-                                <div class="q-header"><h5>4. Why aren't all results shown?</h5></div>
+                            <div class="mb-4" id="faq-q4">
+                                <div class="q-header"><h5>4. Why aren't card images shown for MTG Asia?</h5></div>
+                                <div class="q-answer">
+                                    <p>MTG Asia's website isn't secured via Hypertext Transfer Protocol Secure (HTTPS) while Gishath Fetch is and as such, the browser will not load the "non-secure" images.
+                                    Instead of displaying broken images, placeholder image with the card name is shown.</p>
+                                </div>
+                            </div>
+                            <div class="mb-4" id="faq-q5">
+                                <div class="q-header"><h5>5. Why aren't all results shown?</h5></div>
                                 <div class="q-answer">
                                     <p>
                                         Gishath Fetch only returns the result from the first page of most LGSs' websites.
@@ -224,17 +171,29 @@
             </div>
         </div>
     </div>
-    <div id="contact">
-        <div class="modal" id="contact-modal" tabindex="-1">
+    <div id="news">
+        <div class="modal" id="news-modal" tabindex="-1">
             <div class="modal-dialog modal-xl">
                 <div class="modal-content">
                     <div class="modal-header border-bottom border-dark border-opacity-25">
-                        <h5 class="modal-title">Contact</h5>
+                        <h5 id="news-list" class="modal-title">News</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <p>Have a suggestion or want to report a bug? Drop an email to <a href="mailto:contact@alvinyeoh.com" target="_blank">contact@alvinyeoh.com</a>.</p>
-                        <p>Gishath Fetch is build as a project of passion for fellow MTG enthusiasts. If you would like to support Gishath Fetch monetarily, you may do so via this <a href="https://www.patreon.com/GishathFetch" target="_blank">Patreon</a>.</p>
+                        <div class="row">
+                            <div class="col-lg-4 col-12">
+                                <div>
+                                    <a href="/edhrec-top-100-cards-weekly.html" target="_blank">
+                                        <img src="https://cdn.edhrec.com/_next/static/media/meta_image.0302021e.jpg" class="img-fluid" alt="EDHREC's Top 100 cards Past Week"/>
+                                    </a>
+                                </div>
+                                <div class="my-2 text-center">
+                                    <a href="/edhrec-top-100-cards-weekly.html" target="_blank">
+                                        <h5>EDHREC's Top 100 cards - Past Week</h5>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div class="modal-footer justify-content-start">
                         &copy; 2023 gishathfetch.com by <a href="https://github.com/xenodus" target="_blank">xenodus</a> | <a href="#" data-bs-toggle="modal" data-bs-target="#privacy-modal">privacy policy</a>
