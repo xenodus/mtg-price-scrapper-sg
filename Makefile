@@ -48,7 +48,7 @@ lambda-update:
 
 lambda-update-staging:
 	export AWS_PAGER="" && aws lambda update-function-code \
-      --function-name mtg-price-scrapper \
+      --function-name mtg-price-scrapper-staging \
       --image-uri 206363131200.dkr.ecr.ap-southeast-1.amazonaws.com/mtg-price-scrapper:staging
 
 aws-login:
