@@ -9,6 +9,8 @@ if (window.location.hostname === "staging.gishathfetch.com") {
 
 navForm.addEventListener("submit", onNavFormSubmit);
 
+feather.replace();
+
 function onNavFormSubmit(event) {
     event.preventDefault();
 

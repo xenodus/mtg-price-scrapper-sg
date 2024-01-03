@@ -33,7 +33,6 @@ setupConfig();
 
 // Pre-select checkboxes and pre-fill search from cookie
 function setupConfig() {
-    feather.replace();
     appendLgsCheckboxes();
     fillSearch();
     setupEventListeners();
