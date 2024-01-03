@@ -4,7 +4,7 @@ go 1.21.3
 
 require (
 	github.com/PuerkitoBio/goquery v1.5.1
-	github.com/aws/aws-lambda-go v1.41.0
+	github.com/aws/aws-lambda-go v1.43.0
 	github.com/gocolly/colly/v2 v2.1.0
 	github.com/stretchr/testify v1.7.2
 )
