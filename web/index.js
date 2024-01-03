@@ -34,7 +34,6 @@ setupConfig();
 // Pre-select checkboxes and pre-fill search from cookie
 function setupConfig() {
     appendLgsCheckboxes();
-    fillSearch();
     setupEventListeners();
     onloadSearch();
 }
@@ -60,17 +59,11 @@ function setupEventListeners() {
     });
 }
 
-function fillSearch() {
-    if(getCookie('search') !== undefined && getCookie('search') !== "") {
-        searchInput.value = decodeURIComponent(getCookie('search'));
-    }
-}
-
 function appendLgsCheckboxes() {
     let lgsSelected = [];
 
-    if(getCookie('lgsSelected') !== undefined && getCookie('lgsSelected') !== "") {
-        lgsSelected = decodeURIComponent(getCookie('lgsSelected')).split(",");
+    if(localStorage.getItem('lgsSelected') !== null && localStorage.getItem('lgsSelected') !== undefined && localStorage.getItem('lgsSelected') !== "") {
+        lgsSelected = decodeURIComponent(localStorage.getItem('lgsSelected')).split(",");
     } else {
         lgsSelected = lgsOptions;
     }
@@ -85,20 +78,6 @@ function appendLgsCheckboxes() {
                 </div>
               `;
     }
-}
-
-function setCookie(lgs) {
-    let searchCookie = "search=" +  encodeURIComponent(searchInput.value) + ";";
-    let lgsCookie = "lgsSelected=" + encodeURIComponent(lgs.join(",")) + ";";
-
-    document.cookie = searchCookie;
-    document.cookie = lgsCookie;
-}
-
-function getCookie(name) {
-    let value = `; ${document.cookie}`;
-    let parts = value.split(`; ${name}=`);
-    if (parts.length === 2) return parts.pop().split(';').shift();
 }
 
 function clearTimeouts() {
@@ -174,7 +153,7 @@ function onFormSubmit(event) {
     let searchUrl = apiBaseUrl + searchQueryString
     searchUrl += "&lgs=" + encodeURIComponent(lgsSelected.join(','));
 
-    setCookie(lgsSelected);
+    localStorage.setItem("lgsSelected", encodeURIComponent(lgsSelected.join(",")));
 
     request.open("GET", searchUrl);
     request.send();

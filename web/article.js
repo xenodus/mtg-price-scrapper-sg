@@ -23,3 +23,11 @@ function onNavFormSubmit(event) {
 
     window.open(baseUrl + "?s="+encodeURIComponent(searchStr.toLowerCase()));
 }
+
+function updateMetaTags(name, description, url){
+    document.title = name;
+    document.querySelector('meta[name="description"]').setAttribute("content", description);
+    document.querySelector('meta[property="og:title"]').setAttribute("content", name);
+    document.querySelector('meta[property="og:url"]').setAttribute("content", baseUrl + url);
+    document.querySelector('meta[property="og:description"]').setAttribute("content", description);
+}
