@@ -84,27 +84,13 @@ func Search(input SearchInput) ([]scrapper.Card, error) {
 						cleanCardName = strings.TrimSpace(cleanCardName[:roundBracketIndex-1])
 					}
 
-					// increase accuracy by only including cards which contains searched string in names
-					/*
-						if !strings.Contains(strings.ToLower(cleanCardName), strings.ToLower(input.SearchString)) {
-							continue
-						}
-					*/
-
 					// exact match
 					if strings.ToLower(cleanCardName) == strings.ToLower(input.SearchString) {
 						inStockExactMatchCards = append(inStockExactMatchCards, c)
 						continue
 					}
-					// fall back check for exact card name
-					cardNameSlice := strings.Split(cleanCardName, " ")
-					if len(cardNameSlice) > 1 {
-						if strings.ToLower(cardNameSlice[0]) == strings.ToLower(input.SearchString) {
-							inStockExactMatchCards = append(inStockExactMatchCards, c)
-							continue
-						}
-					}
 
+					// prefix
 					if strings.HasPrefix(strings.ToLower(cleanCardName), strings.ToLower(input.SearchString)) {
 						inStockPrefixMatchCards = append(inStockPrefixMatchCards, c)
 						continue
