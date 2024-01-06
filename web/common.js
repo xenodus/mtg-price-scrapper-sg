@@ -1,26 +1,31 @@
 document.body.innerHTML += `
     <div class="fixed-bottom bg-primary text-light text-center">
         <div class="d-flex flex-row align-items-center justify-content-center">
+            <a data-bs-toggle="offcanvas" href="#offcanvasRight" role="button" aria-controls="offcanvasRight" class="py-1 link-light link-offset-2 link-underline-opacity-0">
+                <div class="px-3 py-1">
+                    <i data-feather="folder-plus" style="width: 14px; margin-right: 4px; position: relative; bottom: 2px;"></i>Saved
+                </div>
+            </a>        
             <a href="#" data-bs-toggle="modal" data-bs-target="#map-modal" class="py-1 link-light link-offset-2 link-underline-opacity-0">
                 <div class="px-3 py-1">
-                    <i data-feather="map" style="width: 14px; margin-right: 3px; position: relative; bottom: 1px;"></i>Map
+                    <i data-feather="map" style="width: 14px; margin-right: 4px; position: relative; bottom: 1px;"></i>Map
                 </div>
             </a>
             <a href="#" data-bs-toggle="modal" data-bs-target="#news-modal" class="py-1 link-light link-offset-2 link-underline-opacity-0">
                 <div class="px-3 py-1">
-                    <i data-feather="file-text" style="width: 14px; margin-right: 3px; position: relative; bottom: 1px;"></i>Guides
+                    <i data-feather="file-text" style="width: 14px; margin-right: 3px; position: relative; bottom: 2px;"></i>Guides
                 </div>
             </a>
             <a href="#" data-bs-toggle="modal" data-bs-target="#faq-modal" class="py-1 link-light link-offset-2 link-underline-opacity-0">
                 <div class="px-3 py-1">
-                    <i data-feather="help-circle" style="width: 14px; margin-right: 3px; position: relative; bottom: 1px;"></i>FAQs
+                    <i data-feather="help-circle" style="width: 14px; margin-right: 3px; position: relative; bottom: 2px;"></i>FAQs
                 </div>
             </a>
-            <a href="#top" class="py-1 link-light link-offset-2 link-underline-opacity-0">
+            <!--a href="#top" class="py-1 link-light link-offset-2 link-underline-opacity-0">
                 <div class="px-3 py-1">
                     <i data-feather="arrow-up" style="width: 14px; margin-right: 3px; position: relative; bottom: 1px;"></i>Top
                 </div>
-            </a>
+            </a-->
         </div>
     </div>
 `;
@@ -191,8 +196,32 @@ document.body.innerHTML += `
     </div>
 `;
 
-feather.replace();
+document.body.innerHTML += `
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+        <div class="offcanvas-header pb-0">
+            <h5 class="offcanvas-title" id="offcanvasRightLabel">Saved Cards</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            <div class="mb-3">When a card is saved, a snapshot of it from that point in time is taken. If there is any change in its price or availability, it will not be updated automatically.</div>
+            <div id="cartContent">
+                <div class="row">
+                    <div class="col-6">
+                        <div class="text-center mb-2">
+                          <a href="https://www.flagshipgames.sg/products/sol-ring-commander-2013?_pos=2&amp;_sid=822ba891b&amp;_ss=r" target="_blank">
+                            <img src="https://www.flagshipgames.sg/cdn/shop/products/1b59533a-3e38-495d-873e-2f89fbd08494_370x480.jpg?v=1600893402" loading="lazy" class="img-fluid w-100" alt="Sol Ring [Commander 2013]">
+                          </a>
+                        </div>                    
+                    </div>                                                                                                               
+                </div>
+            </div>
+        </div>
+    </div>
+`;
 
+// For force updates of storage
+let version = "1.0";
+let cart = [];
 let lgsMap = [
     {
         "id": "agora-map",
@@ -286,14 +315,12 @@ let lgsMap = [
     }
 ]
 
-const mapDivBody = document.getElementById("map").getElementsByClassName("modal-body")[0];
-
+// Map page
 let mapListHtml = "";
 let mapItemsHtml = "";
 let topBtnHtml = `<a href="#map-list" class="btn btn-primary" role="button">Back to top</a>`;
 let closeBtnHtml = `<button type="button" class="btn btn-secondary" style="margin-left: 7px;" data-bs-dismiss="modal">Close</button>`;
 
-// Menu
 mapListHtml += `<div class="mb-4"><ul style="padding-left: 1rem">`;
 for(let i = 0; i < lgsMap.length; i++) {
     mapListHtml += `<li><a href="#`+lgsMap[i].id+`" class="link-offset-2" alt="`+lgsMap[i].name+`">`+lgsMap[i].name+`</a></li>`;
@@ -307,4 +334,104 @@ for(let i = 0; i < lgsMap.length; i++) {
     `;
 }
 mapListHtml += `<ul></div>`;
-mapDivBody.innerHTML = mapListHtml + mapItemsHtml;
+document.getElementById("map").getElementsByClassName("modal-body")[0].innerHTML = mapListHtml + mapItemsHtml;
+
+// Init
+setVersionAndClearStorage();
+onloadCart();
+updateCartPage();
+
+function setVersionAndClearStorage() {
+    if(localStorage.getItem('version') !== null && localStorage.getItem('version') !== undefined && localStorage.getItem('version') !== "") {
+        if (localStorage.getItem("version") !== version) {
+            // clear storage from previous version if needed
+        }
+    }
+    localStorage.setItem("version", version);
+}
+
+function onloadCart() {
+    if(localStorage.getItem('cart') !== null && localStorage.getItem('cart') !== undefined && localStorage.getItem('cart') !== "") {
+        cart = JSON.parse(localStorage.getItem('cart'));
+    }
+}
+
+function removeFromCart(index) {
+    // get from storage first in case multiple tabs add / removing
+    if(localStorage.getItem('cart') !== null && localStorage.getItem('cart') !== undefined && localStorage.getItem('cart') !== "") {
+        cart = JSON.parse(localStorage.getItem('cart'));
+    } else {
+        cart = [];
+    }
+
+    if (index >= 0 && cart.length > index) {
+        cart.splice(index, 1);
+        localStorage.setItem("cart", JSON.stringify(cart));
+        updateCartPage();
+    }
+}
+
+function updateCartPage() {
+    let cartContent = document.getElementById("cartContent");
+    cartContent.innerHTML = "";
+    let html = "";
+    if (cart.length > 0) {
+        html += `<div class="row">`;
+
+        for(let i=0; i<cart.length; i++) {
+            let removeFromCartBtn = `<button data-index="`+i+`" type="button" class="removeFromCartBtn btn btn-danger btn-sm rounded-pill removeFromCartBtn"><i data-feather="trash-2" class="removeFromCartIcon"></i> Remove</button>`;
+
+            html += `
+            <div class="col-6 mb-3">
+                <div class="text-center mb-2">
+                    <a href="`+cart[i]["url"]+`" target="_blank">
+                        <img src="`+(cart[i]["img"]===""?`https://placehold.co/304x424?text=`+cart[i]["name"]:cart[i]["img"])+`" loading="lazy" class="img-fluid w-100" alt="`+cart[i]["name"]+`"/>
+                    </a>
+                </div>
+                <div class="text-center">
+                    <div class="fs-6 lh-sm fw-bold mb-1">`+cart[i]["name"]+`</div>
+                    `+((cart[i].hasOwnProperty("quality") && cart[i]["quality"]!=="")?`<div class="fs-6 lh-sm fw-bold mb-1">≪ `+cart[i]["quality"]+` ≫</div>`:``)+`
+                    <div class="fs-6 lh-sm">S$ `+cart[i]["price"].toFixed(2)+`</div>
+                    <div class="mb-2"><a href="`+cart[i]["url"]+`" target="_blank" class="link-offset-2">`+cart[i]["src"]+`</a></div>
+                    `+removeFromCartBtn+`
+                </div>
+            </div>
+            `;
+        }
+        html += `</div>`;
+
+        if (cart.length >=2) {
+            html += `<div class="mt-5"><button type="button" id="clearCartBtn" class="btn btn-danger w-100 text-uppercase">Remove all saved cards</button></div>`;
+        }
+    } else {
+        html += `<strong>No cards saved yet.</strong>`;
+    }
+    cartContent.innerHTML = html;
+    feather.replace();
+    removeCartEventListeners();
+}
+
+function removeCartEventListeners() {
+    let removeFromCartBtns = document.querySelectorAll("button.removeFromCartBtn");
+    removeFromCartBtns.forEach(function(elem) {
+        elem.addEventListener("click", function() {
+            if (this.getAttribute("data-index") !== "") {
+                removeFromCart(this.getAttribute("data-index"));
+                updateCartPage();
+            }
+        });
+    });
+
+    let emptyCartBtn = document.getElementById("clearCartBtn");
+    if (emptyCartBtn !== null) {
+        emptyCartBtn.addEventListener("click", function() {
+            if(confirm("Are you sure you want to remove all saved cards?")) {
+                if (cart.length > 0) {
+                    cart = [];
+                    localStorage.removeItem("cart");
+                    updateCartPage();
+                }
+            }
+        });
+    }
+}

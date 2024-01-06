@@ -1,9 +1,30 @@
 body {
     font-family: 'Barlow', serif;
 }
+#logo {
+    width: 120px;
+}
 .map-item iframe{
     float:left;
     min-height: 450px;
+}
+.addCartBtn,
+.removeFromCartBtn {
+    font-size: 11px;
+    padding-bottom: 5px;
+}
+.addCartIcon,
+.removeFromCartIcon {
+    width: 12px;
+    height: 12px;
+    position: relative;
+    bottom: 1px;
+}
+#emptyCartIcon {
+    width: 16px;
+    height: 16px;
+    position: relative;
+    bottom: 1px;
 }
 @media (min-width: 1400px) {
     .container {

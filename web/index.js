@@ -20,11 +20,14 @@ const lgsOptions = [
     "OneMtg",
     "Sanctuary Gaming"
 ];
+const alreadyInCartBtnHtml = `<i data-feather="check-square" class="addCartIcon"></i> Saved`;
+
 let timeouts = [];
+let searchResults = [];
 let baseUrl = "https://gishathfetch.com/";
 let apiBaseUrl = "https://api.gishathfetch.com/";
 
-if (window.location.hostname === "staging.gishathfetch.com") {
+if (window.location.hostname === "staging.gishathfetch.com" || window.location.hostname === "localhost") {
     baseUrl = "https://staging.gishathfetch.com/";
     apiBaseUrl = "https://staging-api.gishathfetch.com/";
 }
@@ -49,7 +52,7 @@ function onloadSearch() {
 }
 
 function setupEventListeners() {
-    form.addEventListener("submit", onFormSubmit);
+    form.addEventListener("submit", searchCard);
 
     document.addEventListener("keypress", function(event) {
         if (event.keyCode === 13) {
@@ -109,11 +112,13 @@ function resetSubmitBtn() {
 }
 
 function updatePageUrlTitle(searchStr, url) {
-    window.history.pushState(searchStr.toLowerCase(), searchStr.toLowerCase() + " | " + pageTitle, url);
-    document.title = searchStr.toLowerCase() + " | " + pageTitle;
+    if (window.location.hostname !== "localhost") {
+        window.history.pushState(searchStr.toLowerCase(), searchStr.toLowerCase() + " | " + pageTitle, url);
+        document.title = searchStr.toLowerCase() + " | " + pageTitle;
+    }
 }
 
-function onFormSubmit(event) {
+function searchCard(event) {
     event.preventDefault();
 
     let searchStr = searchInput.value.trim()
@@ -171,6 +176,7 @@ function onFormSubmit(event) {
                 // Do something with the data
                 if (result.hasOwnProperty("data")) {
                     if (result["data"] !== null && result["data"].length > 0) {
+                        searchResults = result["data"];
                         updatePageUrlTitle(searchStr, baseUrl + searchQueryString);
                         let html = `<div class="row">`;
                         for(let i = 0; i < result["data"].length; i++) {
@@ -179,6 +185,13 @@ function onFormSubmit(event) {
                                 && result["data"][i].hasOwnProperty("name")
                                 && result["data"][i].hasOwnProperty("price")
                                 && result["data"][i].hasOwnProperty("src")) {
+
+                                // add to cart btn state
+                                let addToCartBtn = `<button data-index="`+i+`" type="button" class="addToCartBtn btn btn-primary btn-sm rounded-pill addCartBtn"><i data-feather="folder-plus" class="addCartIcon"></i> Save</button>`;
+                                if (existsInCart(result["data"][i]) === true) {
+                                    addToCartBtn = `<button type="button" class="btn btn-success btn-sm rounded-pill addCartBtn" disabled>`+alreadyInCartBtnHtml+` </button>`;
+                                }
+
                                 let h = `
                                   <div class="col-lg-3 col-6 mb-4">
                                     <div class="text-center mb-2">
@@ -190,16 +203,19 @@ function onFormSubmit(event) {
                                       <div class="fs-6 lh-sm fw-bold mb-1">`+result["data"][i]["name"]+`</div>
                                       `+((result["data"][i].hasOwnProperty("quality") && result["data"][i]["quality"]!=="")?`<div class="fs-6 lh-sm fw-bold mb-1">≪ `+result["data"][i]["quality"]+` ≫</div>`:``)+`
                                       <div class="fs-6 lh-sm">S$ `+result["data"][i]["price"].toFixed(2)+`</div>
-                                      <div><a href="`+result["data"][i]["url"]+`" target="_blank" class="link-offset-2">`+result["data"][i]["src"]+`</a></div>
+                                      <div class="mb-2"><a href="`+result["data"][i]["url"]+`" target="_blank" class="link-offset-2">`+result["data"][i]["src"]+`</a></div>
+                                      <div>`+addToCartBtn+`</div>
                                     </div>
                                   </div>`;
-                                html += h
+                                html += h;
                                 resultCount++;
                             }
                         }
-                        html += `</div>`
+                        html += `</div>`;
                         resultDiv.innerHTML = html;
                     }
+                    feather.replace();
+                    addCartEventListeners();
                 }
 
                 // Tag search str
@@ -217,4 +233,46 @@ function onFormSubmit(event) {
             resetSubmitBtn();
         }
     };
+}
+
+function addCartEventListeners() {
+    let addToCartBtns = document.querySelectorAll("button.addToCartBtn");
+    addToCartBtns.forEach(function(elem) {
+        elem.addEventListener("click", function() {
+            if (this.getAttribute("data-index") !== "") {
+                addToCart(this.getAttribute("data-index"));
+                this.innerHTML = alreadyInCartBtnHtml;
+                this.disabled = true;
+                this.classList.remove("btn-primary");
+                this.classList.add("btn-success");
+                feather.replace();
+            }
+        });
+    });
+}
+
+function addToCart(index) {
+    if (index >= 0 && searchResults.length > index) {
+        // get from storage first in case multiple tabs add / removing
+        if(localStorage.getItem('cart') !== null && localStorage.getItem('cart') !== undefined && localStorage.getItem('cart') !== "") {
+            cart = JSON.parse(localStorage.getItem('cart'));
+        } else {
+            cart = [];
+        }
+
+        cart.push(searchResults[index]);
+        localStorage.setItem("cart", JSON.stringify(cart));
+        updateCartPage();
+    }
+}
+
+function existsInCart(item) {
+    if (cart.length > 0) {
+        for(let i=0; i<cart.length; i++) {
+            if (JSON.stringify(cart[i]) === JSON.stringify(item)) {
+                return true;
+            }
+        }
+    }
+    return false;
 }
