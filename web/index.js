@@ -22,6 +22,7 @@ const lgsOptions = [
 ];
 const alreadyInCartBtnHtml = `<i data-feather="check-square" class="addCartIcon"></i> Saved`;
 
+let contentAd = "";
 let timeouts = [];
 let searchResults = [];
 let baseUrl = "https://gishathfetch.com/";
@@ -38,7 +39,9 @@ setupConfig();
 function setupConfig() {
     appendLgsCheckboxes();
     setupEventListeners();
-    onloadSearch();
+    window.onload = function() {
+        onloadSearch();
+    }
 }
 
 function onloadSearch() {
@@ -101,6 +104,15 @@ function updateSubmitBtnProgress() {
 }
 
 function resetResult() {
+    // Copy ad for placement in content
+    if (document.getElementsByClassName("ad-small").length > 0) {
+        contentAd = document.getElementsByClassName("ad-small")[0].outerHTML;
+    }
+
+    if (document.getElementsByClassName("ad-large").length > 0) {
+        contentAd += document.getElementsByClassName("ad-large")[0].outerHTML;
+    }
+
     resultDiv.innerHTML = "";
     resultCountDiv.innerHTML = "";
 }
@@ -207,6 +219,12 @@ function searchCard(event) {
                                       <div>`+addToCartBtn+`</div>
                                     </div>
                                   </div>`;
+
+                                // Only place in content if result count > 8
+                                if (result["data"].length > 8 && i+1 == 8) {
+                                    h += contentAd;
+                                }
+
                                 html += h;
                                 resultCount++;
                             }
