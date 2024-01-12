@@ -20,11 +20,12 @@ const lgsOptions = [
     "OneMtg",
     "Sanctuary Gaming"
 ];
-const alreadyInCartBtnHtml = `<i data-feather="check-square" class="addCartIcon"></i> Saved`;
+const alreadyInCartBtnHtml = `<i data-feather="check-square" class="cartIcon"></i> Saved`;
 
 let contentAd = "";
 let timeouts = [];
 let searchResults = [];
+let searchHistory = [];
 let baseUrl = "https://gishathfetch.com/";
 let apiBaseUrl = "https://api.gishathfetch.com/";
 
@@ -39,9 +40,7 @@ setupConfig();
 function setupConfig() {
     appendLgsCheckboxes();
     setupEventListeners();
-    window.onload = function() {
-        onloadSearch();
-    }
+    onloadSearch();
 }
 
 function onloadSearch() {
@@ -199,9 +198,9 @@ function searchCard(event) {
                                 && result["data"][i].hasOwnProperty("src")) {
 
                                 // add to cart btn state
-                                let addToCartBtn = `<button data-index="`+i+`" type="button" class="addToCartBtn btn btn-primary btn-sm rounded-pill addCartBtn"><i data-feather="folder-plus" class="addCartIcon"></i> Save</button>`;
+                                let addToCartBtn = `<button data-index="`+i+`" type="button" class="addToCartBtn btn btn-primary btn-sm addCartBtn"><i data-feather="folder-plus" class="cartIcon"></i> Save</button>`;
                                 if (existsInCart(result["data"][i]) === true) {
-                                    addToCartBtn = `<button type="button" class="btn btn-success btn-sm rounded-pill addCartBtn" disabled>`+alreadyInCartBtnHtml+` </button>`;
+                                    addToCartBtn = `<button type="button" class="btn btn-success btn-sm addCartBtn" disabled>`+alreadyInCartBtnHtml+` </button>`;
                                 }
 
                                 let h = `

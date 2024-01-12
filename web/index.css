@@ -9,20 +9,14 @@ body {
     min-height: 450px;
 }
 .addCartBtn,
-.removeFromCartBtn {
+.removeFromCartBtn,
+.cartSearchBtn {
     font-size: 11px;
     padding-bottom: 5px;
 }
-.addCartIcon,
-.removeFromCartIcon {
+.cartIcon {
     width: 12px;
     height: 12px;
-    position: relative;
-    bottom: 1px;
-}
-#emptyCartIcon {
-    width: 16px;
-    height: 16px;
     position: relative;
     bottom: 1px;
 }

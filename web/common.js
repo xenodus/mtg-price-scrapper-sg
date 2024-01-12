@@ -79,7 +79,7 @@ document.body.innerHTML += `
                                 <div class="q-header"><h5>2. Is Gishath Fetch free to use?</h5></div>
                                 <div class="q-answer">
                                     <p>Gishath Fetch is build as a project of passion for fellow MTG enthusiasts. There are no plans currently nor in the foreseeable future to paywall it.</p>
-                                    <p>Google ads are being served to hopefully generate sufficient earnings to cover the infrastructure hosting cost. This is still being tested and if you have any feedback about the ad placements, feel free to get in touch (below).</p>
+                                    <p>Google ads are being served to hopefully generate sufficient earnings to cover the operating cost. This is still being tested and if you have any feedback about the ad placements, feel free to get in touch (below).</p>
                                     <p>If you would like to support Gishath Fetch directly, you may do so via this <a href="https://www.patreon.com/GishathFetch" target="_blank">Patreon</a>.</p>
                                 </div>
                             </div>
@@ -199,7 +199,7 @@ document.body.innerHTML += `
 
 document.body.innerHTML += `
     <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
-        <div class="offcanvas-header pb-0">
+        <div class="offcanvas-header">
             <h5 class="offcanvas-title" id="offcanvasRightLabel">Saved Cards</h5>
             <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
@@ -380,7 +380,8 @@ function updateCartPage() {
         html += `<div class="row">`;
 
         for(let i=0; i<cart.length; i++) {
-            let removeFromCartBtn = `<button data-index="`+i+`" type="button" class="removeFromCartBtn btn btn-danger btn-sm rounded-pill removeFromCartBtn"><i data-feather="trash-2" class="removeFromCartIcon"></i> Remove</button>`;
+            let removeFromCartBtn = `<button data-index="`+i+`" type="button" class="removeFromCartBtn btn btn-danger btn-sm removeFromCartBtn"><i data-feather="trash-2" class="cartIcon"></i> Remove</button>`;
+            let searchBtn = `<a href="/?s=`+cart[i]["name"]+`" class="btn btn-primary btn-sm cartSearchBtn ms-1"><i data-feather="search" class="cartIcon"></i> Search</a>`;
 
             html += `
             <div class="col-6 mb-3">
@@ -394,7 +395,7 @@ function updateCartPage() {
                     `+((cart[i].hasOwnProperty("quality") && cart[i]["quality"]!=="")?`<div class="fs-6 lh-sm fw-bold mb-1">≪ `+cart[i]["quality"]+` ≫</div>`:``)+`
                     <div class="fs-6 lh-sm">S$ `+cart[i]["price"].toFixed(2)+`</div>
                     <div class="mb-2"><a href="`+cart[i]["url"]+`" target="_blank" class="link-offset-2">`+cart[i]["src"]+`</a></div>
-                    `+removeFromCartBtn+`
+                    <div>`+removeFromCartBtn+searchBtn+`</div>
                 </div>
             </div>
             `;

@@ -52,22 +52,47 @@
     </div>
     <div id="top" class="container-xl my-3 pt-5">
         <h1 class="mt-3">EDHREC's Top 100 cards - Past Week</h1>
-        <div class="mb-3">Last Updated: 3 Jan 2024</div>
+        <div class="mb-3">Last Updated: 12 Jan 2024</div>
         <p>Looking for ideas on cards to buy? Check out below for <a href="https://edhrec.com/top/week" target="_blank">EDHREC's</a> top 100 cards for the past week.</p>
         <div id="content" class="my-3 pb-3">
             <div id="loader" class="spinner-border" role="status">
                 <span class="visually-hidden">Fetching...</span>
             </div>
         </div>
+        <div class="ad-small mb-4 text-center d-print-none d-block d-sm-none">
+            <div class="text-secondary mb-2" style="font-size: 11px;">Ad by Google</div>
+            <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2393161407259792" crossorigin="anonymous"></script>
+            <!-- gishath_horizontal_fixed_small -->
+            <ins class="adsbygoogle"
+                 style="display:inline-block;width:300px;height:250px"
+                 data-ad-client="ca-pub-2393161407259792"
+                 data-ad-slot="3885525646"></ins>
+            <script>
+                (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </div>
+        <div class="ad-large mt-4 pb-5 text-center d-print-none d-none d-sm-block">
+            <div class="text-secondary mb-2" style="font-size: 11px;">Ad by Google</div>
+            <div>
+                <!-- gishath_horizontal_fixed_large -->
+                <ins class="adsbygoogle"
+                     style="display:inline-block;width:728px;height:90px"
+                     data-ad-client="ca-pub-2393161407259792"
+                     data-ad-slot="6707964257"></ins>
+                <script>
+                    (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+            </div>
+        </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
-    <script src="common.js?v=1.0"></script>
+    <script src="common.js"></script>
     <script src="article.js?v=1.0"></script>
     <script>
         updateMetaTags("Search for EDHREC's Top 100 cards for the past week on Gishath Fetch", "Search for EDHREC's Top 100 cards for the past week on Gishath Fetch", "edhrec-top-100-cards-weekly.html");
 
         let cardInfoApi = "https://edhrec.com/api/cards/";
-        let cards = {"format":"dict","names":["sol-ring","arcane-signet","swords-to-plowshares","path-to-exile","cultivate","counterspell","beast-within","blasphemous-act","farseek","talisman-of-dominance","rampant-growth","natures-lore","kodamas-reach","rhystic-study","cyclonic-rift","chaos-warp","heroic-intervention","dimir-signet","ignoble-hierarch","talisman-of-creativity","birds-of-paradise","rakdos-signet","assassins-trophy","orzhov-signet","generous-gift","talisman-of-hierarchy","izzet-signet","talisman-of-indulgence","swiftfoot-boots","rhythm-of-the-wild","smothering-tithe","lightning-greaves","boros-charm","demonic-tutor","azorius-signet","talisman-of-progress","anguished-unmaking","three-visits","dark-ritual","an-offer-you-cant-refuse","eternal-witness","fellwar-stone","talisman-of-conviction","mystic-remora","esper-sentinel","fierce-guardianship","boros-signet","negate","vampiric-tutor","llanowar-elves","brainstorm","growth-spiral","enlightened-tutor","zacama-primal-calamity","teferis-protection","arcane-denial","swan-song","damn","noble-hierarch","feed-the-swarm","deflecting-swat","terminate","dovins-veto","elvish-mystic","dockside-extortionist","sakura-tribe-elder","mystical-tutor","garruks-uprising","toxic-deluge","temur-ascendancy","mind-stone","jeskas-will","worldly-tutor","faithless-looting","vandalblast","ruinous-ultimatum","mana-drain","thought-vessel","etali-primal-conqueror","etali-primal-conqueror","reanimate","avacyns-pilgrim","commanders-sphere","despark","miraris-wake","lotho-corrupt-shirriff","supreme-verdict","void-rend","morophon-the-boundless","simic-signet","return-of-the-wildspeaker","windfall","rakdos-charm","phyrexian-arena","force-of-will","delighted-halfling","sylvan-library","kutzil-malamet-exemplar","deathrite-shaman","fyndhorn-elves","bedevil"]};
+        let cards = {"format":"dict","names":["sol-ring","arcane-signet","swords-to-plowshares","path-to-exile","cultivate","counterspell","beast-within","farseek","blasphemous-act","rampant-growth","talisman-of-dominance","kodamas-reach","natures-lore","chaos-warp","rhystic-study","heroic-intervention","dimir-signet","cyclonic-rift","rakdos-signet","ignoble-hierarch","talisman-of-creativity","birds-of-paradise","orzhov-signet","izzet-signet","swiftfoot-boots","assassins-trophy","rhythm-of-the-wild","generous-gift","lightning-greaves","smothering-tithe","talisman-of-indulgence","talisman-of-hierarchy","boros-charm","azorius-signet","demonic-tutor","anguished-unmaking","talisman-of-progress","three-visits","dark-ritual","boros-signet","talisman-of-conviction","eternal-witness","an-offer-you-cant-refuse","negate","esper-sentinel","fellwar-stone","growth-spiral","mystic-remora","fierce-guardianship","brainstorm","llanowar-elves","vampiric-tutor","arcane-denial","teferis-protection","damn","terminate","enlightened-tutor","swan-song","dovins-veto","feed-the-swarm","sakura-tribe-elder","zacama-primal-calamity","noble-hierarch","garruks-uprising","temur-ascendancy","deflecting-swat","elvish-mystic","toxic-deluge","mind-stone","mystical-tutor","ruinous-ultimatum","vandalblast","dockside-extortionist","jeskas-will","faithless-looting","thought-vessel","commanders-sphere","despark","worldly-tutor","reanimate","mana-drain","avacyns-pilgrim","miraris-wake","void-rend","etali-primal-conqueror","etali-primal-conqueror","supreme-verdict","rakdos-charm","morophon-the-boundless","phyrexian-arena","lotho-corrupt-shirriff","windfall","return-of-the-wildspeaker","simic-signet","putrefy","kutzil-malamet-exemplar","delighted-halfling","goblin-anarchomancer","timeless-lotus","bedevil","sylvan-library"]};
 
         cardInfoRequest(cards);
 
