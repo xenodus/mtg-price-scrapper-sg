@@ -220,7 +220,7 @@ function searchCard(event) {
                                   </div>`;
 
                                 // Only place in content if result count > 8
-                                if (result["data"].length > 8 && i+1 == 8) {
+                                if (result["data"].length > 8 && (((i+1)%8) === 0) && (i+1 !== result["data"].length)) {
                                     h += contentAd;
                                 }
 
