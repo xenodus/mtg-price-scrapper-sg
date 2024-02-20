@@ -7,10 +7,10 @@ github.com/andybalholm/cascadia
 # github.com/antchfx/htmlquery v1.2.3
 ## explicit; go 1.14
 github.com/antchfx/htmlquery
-# github.com/antchfx/xmlquery v1.2.4
+# github.com/antchfx/xmlquery v1.3.1
 ## explicit; go 1.14
 github.com/antchfx/xmlquery
-# github.com/antchfx/xpath v1.1.8
+# github.com/antchfx/xpath v1.1.10
 ## explicit
 github.com/antchfx/xpath
 # github.com/aws/aws-lambda-go v1.43.0
@@ -60,14 +60,14 @@ github.com/stretchr/testify/require
 # github.com/temoto/robotstxt v1.1.1
 ## explicit; go 1.11
 github.com/temoto/robotstxt
-# golang.org/x/net v0.0.0-20200602114024-627f9648deb9
-## explicit; go 1.11
+# golang.org/x/net v0.17.0
+## explicit; go 1.17
 golang.org/x/net/context
 golang.org/x/net/html
 golang.org/x/net/html/atom
 golang.org/x/net/html/charset
-# golang.org/x/text v0.3.2
-## explicit
+# golang.org/x/text v0.13.0
+## explicit; go 1.17
 golang.org/x/text/encoding
 golang.org/x/text/encoding/charmap
 golang.org/x/text/encoding/htmlindex
