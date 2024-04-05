@@ -52,7 +52,7 @@
     </div>
     <div id="top" class="container-xl my-3 pt-5">
         <h1 class="mt-3">List of Multicolor MTG Lands for your decks</h1>
-        <div class="mb-3">Last Updated: 4 Jan 2024</div>
+        <div class="mb-3">Last Updated: 5 Apr 2024</div>
         <p>Looking for multicolor lands? The lists below contains some of the best dual and triple colored lands.</p>
         <div id="content" class="my-3 pb-3">
             <div id="loader" class="spinner-border" role="status">
@@ -103,6 +103,10 @@
                             (adsbygoogle = window.adsbygoogle || []).push({});
                         </script>
                     </div>
+                </div>
+                <div class="cards d-none mb-3">
+                    <h3>Surveil Lands</h3>
+                    <div id="surveilLands"></div>
                 </div>
                 <div class="cards d-none mb-3">
                     <h3>Reveal Lands</h3>
@@ -179,6 +183,7 @@
         let revealLands = {"format":"dict","names":["port-town", "choked-estuary", "foreboding-ruins", "game-trail", "fortified-village", "shineshadow-snarl", "frostboil-snarl", "necroblossom-snarl", "furycalm-snarl", "vineglimmer-snarl"]};
         let slowLands = {"format":"dict","names":["deserted-beach", "shipwreck-marsh", "haunted-ridge", "rockfall-vale", "overgrown-farmland", "shattered-sanctum", "stormcarved-coast", "deathcap-glade", "sundown-pass", "dreamroot-cascade"]};
         let pathwayLands = {"format":"dict","names":["hengegate-pathway", "clearwater-pathway", "blightstep-pathway", "cragcrown-pathway", "branchloft-pathway", "brightclimb-pathway", "riverglide-pathway", "darkbore-pathway", "needleverge-pathway", "barkchannel-pathway"]};
+        let surveilLands = {"format":"dict","names":["commercial-district", "elegant-parlor", "hedge-maze", "lush-portico", "meticulous-archive", "raucous-theater", "shadowy-backstreet", "thundering-falls", "undercity-sewers", "underground-mortuary"]};
 
         // triple
         let triomeLands = {"format":"dict","names":["savai-triome", "indatha-triome", "zagoth-triome", "ketria-triome", "raugrin-triome", "sparas-Headquarters", "raffines-Tower", "xanders-lounge", "ziatoras-proving-ground", "jetmirs-garden"]};
@@ -195,6 +200,7 @@
             "fetchLands": fetchLands,
             "horizonLands": horizonLands,
             "bondLands": bondLands,
+            "surveilLands": surveilLands,
             "revealLands": revealLands,
             "slowLands": slowLands,
             "pathwayLands": pathwayLands,
