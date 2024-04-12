@@ -104,12 +104,8 @@ function updateSubmitBtnProgress() {
 
 function resetResult() {
     // Copy ad for placement in content
-    if (document.getElementsByClassName("ad-small").length > 0) {
-        contentAd = document.getElementsByClassName("ad-small")[0].outerHTML;
-    }
-
     if (document.getElementsByClassName("ad-large").length > 0) {
-        contentAd += document.getElementsByClassName("ad-large")[0].outerHTML;
+        contentAd = document.getElementsByClassName("ad-large")[0].outerHTML;
     }
 
     resultDiv.innerHTML = "";
