@@ -8,6 +8,7 @@ const resultCountDiv = document.getElementById("resultCount");
 const lgsCheckboxes = document.getElementsByName('lgs[]');
 const lgsOptions = [
     "Agora Hobby",
+    "Card Affinity",
     "Cards Citadel",
     "Dueller's Point",
     "Flagship Games",

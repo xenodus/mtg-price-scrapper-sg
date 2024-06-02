@@ -10,6 +10,7 @@ import (
 
 	"mtg-price-scrapper-sg/scrapper"
 	"mtg-price-scrapper-sg/scrapper/agora"
+	"mtg-price-scrapper-sg/scrapper/cardaffinity"
 	"mtg-price-scrapper-sg/scrapper/cardscitadel"
 	"mtg-price-scrapper-sg/scrapper/duellerpoint"
 	"mtg-price-scrapper-sg/scrapper/flagship"
@@ -110,6 +111,7 @@ func Search(input SearchInput) ([]scrapper.Card, error) {
 func initAndMapScrappers(lgs []string) map[string]scrapper.Scrapper {
 	storeScrappers := map[string]scrapper.Scrapper{
 		agora.StoreName:        agora.NewScrapper(),
+		cardaffinity.StoreName: cardaffinity.NewScrapper(),
 		cardscitadel.StoreName: cardscitadel.NewScrapper(),
 		duellerpoint.StoreName: duellerpoint.NewScrapper(),
 		flagship.StoreName:     flagship.NewScrapper(),
