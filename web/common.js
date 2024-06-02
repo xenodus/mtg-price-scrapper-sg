@@ -64,8 +64,7 @@ document.body.innerHTML += `
                                 <li><a href="#faq-q1" class="link-offset-2">How does Gishath Fetch work?</a></li>
                                 <li><a href="#faq-q2" class="link-offset-2">Is Gishath Fetch free to use?</a></li>
                                 <li><a href="#faq-q3" class="link-offset-2">How do I get in touch?</a></li>
-                                <li><a href="#faq-q4" class="link-offset-2">Why aren't images shown for MTG Asia?</a></li>
-                                <li><a href="#faq-q5" class="link-offset-2">Why aren't all results shown?</a></li>
+                                <li><a href="#faq-q4" class="link-offset-2">Why aren't all results shown?</a></li>
                             </ol>
                         </div>
                         <div>
@@ -90,14 +89,7 @@ document.body.innerHTML += `
                                 </div>
                             </div>
                             <div class="mb-4" id="faq-q4">
-                                <div class="q-header"><h5>4. Why aren't card images shown for MTG Asia?</h5></div>
-                                <div class="q-answer">
-                                    <p>MTG Asia's website isn't secured via Hypertext Transfer Protocol Secure (HTTPS) while Gishath Fetch is and as such, the browser will not load the "non-secure" images.
-                                        Instead of displaying broken images, placeholder image with the card name is shown.</p>
-                                </div>
-                            </div>
-                            <div class="mb-4" id="faq-q5">
-                                <div class="q-header"><h5>5. Why aren't all results shown?</h5></div>
+                                <div class="q-header"><h5>4. Why aren't all results shown?</h5></div>
                                 <div class="q-answer">
                                     <p>
                                         Gishath Fetch only returns the result from the first page of most LGSs' websites.

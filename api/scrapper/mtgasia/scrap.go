@@ -1,9 +1,9 @@
 package mtgasia
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/url"
-	"strconv"
 	"strings"
 
 	"github.com/gocolly/colly/v2"
@@ -11,13 +11,36 @@ import (
 )
 
 const StoreName = "MTG Asia"
-const StoreBaseURL = "http://www.asianmagickards.com/"
-const StoreSearchURL = "store.cfm?vSS=%s&iGC=1"
+const StoreBaseURL = "https://www.mtg-asia.com"
+const StoreSearchURL = "/search?q=%s"
 
 type Store struct {
 	Name      string
 	BaseUrl   string
 	SearchUrl string
+}
+
+type CardInfo struct {
+	ID                     int64    `json:"id"`
+	Title                  string   `json:"title"`
+	Option1                string   `json:"option1"`
+	Option2                any      `json:"option2"`
+	Option3                any      `json:"option3"`
+	Sku                    string   `json:"sku"`
+	RequiresShipping       bool     `json:"requires_shipping"`
+	Taxable                bool     `json:"taxable"`
+	FeaturedImage          any      `json:"featured_image"`
+	Available              bool     `json:"available"`
+	Name                   string   `json:"name"`
+	PublicTitle            string   `json:"public_title"`
+	Options                []string `json:"options"`
+	Price                  int      `json:"price"`
+	Weight                 int      `json:"weight"`
+	CompareAtPrice         any      `json:"compare_at_price"`
+	InventoryManagement    string   `json:"inventory_management"`
+	Barcode                any      `json:"barcode"`
+	RequiresSellingPlan    bool     `json:"requires_selling_plan"`
+	SellingPlanAllocations []any    `json:"selling_plan_allocations"`
 }
 
 func NewScrapper() scrapper.Scrapper {
@@ -34,49 +57,34 @@ func (s Store) Scrap(searchStr string) ([]scrapper.Card, error) {
 
 	c := colly.NewCollector()
 
-	c.OnRequest(func(r *colly.Request) {
-		r.Headers.Set("cookie", "CURRENCY=SGD;")
-	})
-
 	c.OnHTML("body", func(e *colly.HTMLElement) {
-		e.ForEach("table#cardTable div.accordion", func(_ int, el *colly.HTMLElement) {
-			// only proceed if name found
-			if len(el.ChildTexts("span.missingText")) > 0 {
-				el.ForEach("table.cardHeader", func(_ int, el2 *colly.HTMLElement) {
-					var (
-						isInstock bool
-						price     float64
-						quality   string
-					)
-					if len(el2.ChildTexts("td")) == 2 {
-						priceStr := el2.ChildTexts("td")[0]
-						priceStr = strings.Replace(priceStr, "SG$", "", -1)
-						priceStr = strings.Replace(priceStr, ",", "", -1)
-						price, _ = strconv.ParseFloat(strings.TrimSpace(priceStr), 64)
+		e.ForEach("div", func(_ int, el *colly.HTMLElement) {
+			cardInfoStr := el.Attr("data-product-variants")
+			if len(cardInfoStr) > 0 {
+				productId := el.Attr("data-product-id")
+				var pageUrl, imgUrl string
+				if len(productId) > 0 {
+					pageUrl = e.ChildAttr("div.product-card-list2__"+productId+" a", "href")
+					imgUrl = e.ChildAttr("div.product-card-list2__"+productId+" img", "src")
+				}
 
-						if price > 0 {
-							isInstock = true
-							quality = el2.ChildTexts("td")[1]
+				var cardInfo []CardInfo
+				err := json.Unmarshal([]byte(cardInfoStr), &cardInfo)
+				if err == nil {
+					if len(cardInfo) > 0 && len(pageUrl) > 0 && len(imgUrl) > 0 {
+						for _, card := range cardInfo {
+							cards = append(cards, scrapper.Card{
+								Name:    strings.TrimSpace(card.Name),
+								Url:     strings.TrimSpace(s.BaseUrl + pageUrl),
+								InStock: card.Available,
+								Price:   float64(card.Price) / 100,
+								Source:  s.Name,
+								Img:     strings.TrimSpace("https:" + imgUrl),
+								Quality: card.Title,
+							})
 						}
 					}
-
-					if isInstock {
-						if el.ChildText("span.foilText") != "" {
-							quality += " " + el.ChildText("span.foilText")
-						}
-
-						cards = append(cards, scrapper.Card{
-							Name:    strings.TrimSpace(el.ChildTexts("span.missingText")[0]),
-							Url:     searchURL,
-							InStock: isInstock,
-							Price:   price,
-							Source:  s.Name,
-							// MTG Asia is not on https so can't use their image
-							// Img:     strings.TrimSpace(StoreBaseURL + el.ChildAttr("img", "src")),
-							Quality: strings.TrimSpace(quality),
-						})
-					}
-				})
+				}
 			}
 		})
 	})

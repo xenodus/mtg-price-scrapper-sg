@@ -15,9 +15,7 @@ import (
 	"mtg-price-scrapper-sg/scrapper/flagship"
 	"mtg-price-scrapper-sg/scrapper/gameshaven"
 	"mtg-price-scrapper-sg/scrapper/gog"
-	"mtg-price-scrapper-sg/scrapper/hideout"
 	"mtg-price-scrapper-sg/scrapper/manapro"
-	"mtg-price-scrapper-sg/scrapper/moxandlotus"
 	"mtg-price-scrapper-sg/scrapper/mtgasia"
 	"mtg-price-scrapper-sg/scrapper/onemtg"
 	"mtg-price-scrapper-sg/scrapper/sanctuary"
@@ -117,12 +115,12 @@ func initAndMapScrappers(lgs []string) map[string]scrapper.Scrapper {
 		flagship.StoreName:     flagship.NewScrapper(),
 		gameshaven.StoreName:   gameshaven.NewScrapper(),
 		gog.StoreName:          gog.NewScrapper(),
-		hideout.StoreName:      hideout.NewScrapper(),
-		manapro.StoreName:      manapro.NewScrapper(),
-		moxandlotus.StoreName:  moxandlotus.NewScrapper(),
-		mtgasia.StoreName:      mtgasia.NewScrapper(),
-		onemtg.StoreName:       onemtg.NewScrapper(),
-		sanctuary.StoreName:    sanctuary.NewScrapper(),
+		// hideout.StoreName:      hideout.NewScrapper(),
+		manapro.StoreName: manapro.NewScrapper(),
+		// moxandlotus.StoreName:  moxandlotus.NewScrapper(),
+		mtgasia.StoreName:   mtgasia.NewScrapper(),
+		onemtg.StoreName:    onemtg.NewScrapper(),
+		sanctuary.StoreName: sanctuary.NewScrapper(),
 	}
 
 	if len(lgs) > 0 {

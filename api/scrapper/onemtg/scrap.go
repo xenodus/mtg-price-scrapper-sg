@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/url"
-	"strconv"
 	"strings"
 
 	"github.com/gocolly/colly/v2"
@@ -91,19 +90,4 @@ func (s Store) Scrap(searchStr string) ([]scrapper.Card, error) {
 	})
 
 	return cards, c.Visit(searchURL)
-}
-
-func parsePriceAndQuality(priceQualityStr string) (float64, string, error) {
-	priceQualityStrSlice := strings.Split(priceQualityStr, " - ")
-	if len(priceQualityStrSlice) == 2 {
-		quality := strings.TrimSpace(priceQualityStrSlice[0])
-
-		priceStr := strings.TrimSpace(priceQualityStrSlice[1])
-		priceStr = strings.Replace(priceStr, "$", "", -1)
-		priceStr = strings.Replace(priceStr, ",", "", -1)
-		price, err := strconv.ParseFloat(priceStr, 64)
-
-		return price, quality, err
-	}
-	return 0, "", nil
 }
