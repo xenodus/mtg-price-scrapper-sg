@@ -16,7 +16,7 @@ const lgsOptions = [
     "Grey Ogre Games",
     "Hideout (Under Maintenance)",
     "Mana Pro",
-    "Mox & Lotus (Under Maintenance)",
+    "Mox & Lotus",
     "MTG Asia",
     "OneMtg",
     "Sanctuary Gaming"
