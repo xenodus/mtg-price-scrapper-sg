@@ -14,7 +14,7 @@ const lgsOptions = [
     "Flagship Games",
     "Games Haven",
     "Grey Ogre Games",
-    "Hideout (Under Maintenance)",
+    "Hideout",
     "Mana Pro",
     "Mox & Lotus",
     "MTG Asia",
