@@ -21,7 +21,6 @@ import (
 	"mtg-price-scrapper-sg/scrapper/moxandlotus"
 	"mtg-price-scrapper-sg/scrapper/mtgasia"
 	"mtg-price-scrapper-sg/scrapper/onemtg"
-	"mtg-price-scrapper-sg/scrapper/sanctuary"
 )
 
 type SearchInput struct {
@@ -124,7 +123,7 @@ func initAndMapScrappers(lgs []string) map[string]scrapper.Scrapper {
 		moxandlotus.StoreName:  moxandlotus.NewScrapper(),
 		mtgasia.StoreName:      mtgasia.NewScrapper(),
 		onemtg.StoreName:       onemtg.NewScrapper(),
-		sanctuary.StoreName:    sanctuary.NewScrapper(),
+		// sanctuary.StoreName:    sanctuary.NewScrapper(),
 	}
 
 	if len(lgs) > 0 {

@@ -11,21 +11,21 @@ document.body.innerHTML += `
                     <i data-feather="map" style="width: 14px; margin-right: 4px; position: relative; bottom: 1px;"></i>Map
                 </div>
             </a>
-            <a href="#" data-bs-toggle="modal" data-bs-target="#news-modal" class="py-1 link-light link-offset-2 link-underline-opacity-0">
-                <div class="px-3 py-1">
-                    <i data-feather="file-text" style="width: 14px; margin-right: 3px; position: relative; bottom: 2px;"></i>Guides
-                </div>
-            </a>
+<!--            <a href="#" data-bs-toggle="modal" data-bs-target="#news-modal" class="py-1 link-light link-offset-2 link-underline-opacity-0">-->
+<!--                <div class="px-3 py-1">-->
+<!--                    <i data-feather="file-text" style="width: 14px; margin-right: 3px; position: relative; bottom: 2px;"></i>Guides-->
+<!--                </div>-->
+<!--            </a>-->
             <a href="#" data-bs-toggle="modal" data-bs-target="#faq-modal" class="py-1 link-light link-offset-2 link-underline-opacity-0">
                 <div class="px-3 py-1">
                     <i data-feather="help-circle" style="width: 14px; margin-right: 3px; position: relative; bottom: 2px;"></i>FAQs
                 </div>
             </a>
-            <!--a href="#top" class="py-1 link-light link-offset-2 link-underline-opacity-0">
+            <a href="#top" class="py-1 link-light link-offset-2 link-underline-opacity-0">
                 <div class="px-3 py-1">
                     <i data-feather="arrow-up" style="width: 14px; margin-right: 3px; position: relative; bottom: 1px;"></i>Top
                 </div>
-            </a-->
+            </a>
         </div>
     </div>
 `;
@@ -112,51 +112,51 @@ document.body.innerHTML += `
     </div>
 `;
 
-document.body.innerHTML += `
-    <div id="news">
-        <div class="modal" id="news-modal" tabindex="-1">
-            <div class="modal-dialog modal-xl">
-                <div class="modal-content">
-                    <div class="modal-header border-bottom border-dark border-opacity-25">
-                        <h5 id="news-list" class="modal-title">Guides</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="row">
-                            <div class="col-lg-4 col-12 mb-3">
-                                <div>
-                                    <a href="/edhrec-top-100-cards-weekly.html" target="_blank">
-                                        <img src="https://cdn.edhrec.com/_next/static/media/meta_image.0302021e.jpg" class="img-fluid" alt="EDHREC's Top 100 cards Past Week"/>
-                                    </a>
-                                </div>
-                                <div class="my-2 text-center">
-                                    <a href="/edhrec-top-100-cards-weekly.html" target="_blank">
-                                        <h5>EDHREC's Top 100 cards - Past Week</h5>
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="col-lg-4 col-12 mb-3">
-                                <div>
-                                    <a href="/multicolor-lands.html" target="_blank">
-                                        <img src="img/lands.png" class="img-fluid" alt="Search for the best multicolor MTG lands on Gishath Fetch"/>
-                                    </a>
-                                </div>
-                                <div class="my-2 text-center">
-                                    <a href="/multicolor-lands.html" target="_blank">
-                                        <h5>Multicolor MTG lands</h5>
-                                    </a>
-                                </div>
-                            </div>                            
-                        </div>
-                    </div>
-                    <div class="modal-footer justify-content-start">
-                        &copy; 2023 gishathfetch.com by <a href="https://github.com/xenodus" target="_blank">xenodus</a> | <a href="#" data-bs-toggle="modal" data-bs-target="#privacy-modal">privacy policy</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-`;
+// document.body.innerHTML += `
+//     <div id="news">
+//         <div class="modal" id="news-modal" tabindex="-1">
+//             <div class="modal-dialog modal-xl">
+//                 <div class="modal-content">
+//                     <div class="modal-header border-bottom border-dark border-opacity-25">
+//                         <h5 id="news-list" class="modal-title">Guides</h5>
+//                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+//                     </div>
+//                     <div class="modal-body">
+//                         <div class="row">
+//                             <div class="col-lg-4 col-12 mb-3">
+//                                 <div>
+//                                     <a href="/edhrec-top-100-cards-weekly.html" target="_blank">
+//                                         <img src="https://cdn.edhrec.com/_next/static/media/meta_image.0302021e.jpg" class="img-fluid" alt="EDHREC's Top 100 cards Past Week"/>
+//                                     </a>
+//                                 </div>
+//                                 <div class="my-2 text-center">
+//                                     <a href="/edhrec-top-100-cards-weekly.html" target="_blank">
+//                                         <h5>EDHREC's Top 100 cards - Past Week</h5>
+//                                     </a>
+//                                 </div>
+//                             </div>
+//                             <div class="col-lg-4 col-12 mb-3">
+//                                 <div>
+//                                     <a href="/multicolor-lands.html" target="_blank">
+//                                         <img src="img/lands.png" class="img-fluid" alt="Search for the best multicolor MTG lands on Gishath Fetch"/>
+//                                     </a>
+//                                 </div>
+//                                 <div class="my-2 text-center">
+//                                     <a href="/multicolor-lands.html" target="_blank">
+//                                         <h5>Multicolor MTG lands</h5>
+//                                     </a>
+//                                 </div>
+//                             </div>
+//                         </div>
+//                     </div>
+//                     <div class="modal-footer justify-content-start">
+//                         &copy; 2023 gishathfetch.com by <a href="https://github.com/xenodus" target="_blank">xenodus</a> | <a href="#" data-bs-toggle="modal" data-bs-target="#privacy-modal">privacy policy</a>
+//                     </div>
+//                 </div>
+//             </div>
+//         </div>
+//     </div>
+// `;
 
 document.body.innerHTML += `
     <div id="privacy">
@@ -299,12 +299,6 @@ let lgsMap = [
         "name": "One MTG",
         "address": "100 Jln Sultan, #03-11 Sultan Plaza, Singapore 199001",
         "iframe": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.7866900551694!2d103.85910407451628!3d1.3029641617257042!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31da19180d91f3a1%3A0x75c807bf93d430a4!2sOne%20MTG!5e0!3m2!1sen!2ssg!4v1702821425238!5m2!1sen!2ssg",
-    },
-    {
-        "id": "sanctuary-map",
-        "name": "Sanctuary Gaming",
-        "address": "277 Orchard Rd, #04-09 Orchard, Gateway 238858",
-        "iframe": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.7903463145303!2d103.83467127576455!3d1.3006530583733655!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31da19972abb859d%3A0x2a935be2b43c260d!2sSanctuary%20Gaming!5e0!3m2!1sen!2ssg!4v1702821457166!5m2!1sen!2ssg",
     }
 ]
 
