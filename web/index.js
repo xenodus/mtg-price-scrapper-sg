@@ -10,6 +10,7 @@ const lgsOptions = [
     "Agora Hobby",
     "Card Affinity",
     "Cards Citadel",
+    "Cards & Collections",
     "Dueller's Point",
     "Flagship Games",
     "Games Haven",
@@ -18,8 +19,7 @@ const lgsOptions = [
     "Mana Pro",
     "Mox & Lotus",
     "MTG Asia",
-    "OneMtg",
-    "Sanctuary Gaming"
+    "OneMtg"
 ];
 const alreadyInCartBtnHtml = `<i data-feather="check-square" class="cartIcon"></i> Saved`;
 

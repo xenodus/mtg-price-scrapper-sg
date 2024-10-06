@@ -11,11 +11,6 @@ document.body.innerHTML += `
                     <i data-feather="map" style="width: 14px; margin-right: 4px; position: relative; bottom: 1px;"></i>Map
                 </div>
             </a>
-<!--            <a href="#" data-bs-toggle="modal" data-bs-target="#news-modal" class="py-1 link-light link-offset-2 link-underline-opacity-0">-->
-<!--                <div class="px-3 py-1">-->
-<!--                    <i data-feather="file-text" style="width: 14px; margin-right: 3px; position: relative; bottom: 2px;"></i>Guides-->
-<!--                </div>-->
-<!--            </a>-->
             <a href="#" data-bs-toggle="modal" data-bs-target="#faq-modal" class="py-1 link-light link-offset-2 link-underline-opacity-0">
                 <div class="px-3 py-1">
                     <i data-feather="help-circle" style="width: 14px; margin-right: 3px; position: relative; bottom: 2px;"></i>FAQs
@@ -111,52 +106,6 @@ document.body.innerHTML += `
         </div>
     </div>
 `;
-
-// document.body.innerHTML += `
-//     <div id="news">
-//         <div class="modal" id="news-modal" tabindex="-1">
-//             <div class="modal-dialog modal-xl">
-//                 <div class="modal-content">
-//                     <div class="modal-header border-bottom border-dark border-opacity-25">
-//                         <h5 id="news-list" class="modal-title">Guides</h5>
-//                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-//                     </div>
-//                     <div class="modal-body">
-//                         <div class="row">
-//                             <div class="col-lg-4 col-12 mb-3">
-//                                 <div>
-//                                     <a href="/edhrec-top-100-cards-weekly.html" target="_blank">
-//                                         <img src="https://cdn.edhrec.com/_next/static/media/meta_image.0302021e.jpg" class="img-fluid" alt="EDHREC's Top 100 cards Past Week"/>
-//                                     </a>
-//                                 </div>
-//                                 <div class="my-2 text-center">
-//                                     <a href="/edhrec-top-100-cards-weekly.html" target="_blank">
-//                                         <h5>EDHREC's Top 100 cards - Past Week</h5>
-//                                     </a>
-//                                 </div>
-//                             </div>
-//                             <div class="col-lg-4 col-12 mb-3">
-//                                 <div>
-//                                     <a href="/multicolor-lands.html" target="_blank">
-//                                         <img src="img/lands.png" class="img-fluid" alt="Search for the best multicolor MTG lands on Gishath Fetch"/>
-//                                     </a>
-//                                 </div>
-//                                 <div class="my-2 text-center">
-//                                     <a href="/multicolor-lands.html" target="_blank">
-//                                         <h5>Multicolor MTG lands</h5>
-//                                     </a>
-//                                 </div>
-//                             </div>
-//                         </div>
-//                     </div>
-//                     <div class="modal-footer justify-content-start">
-//                         &copy; 2023 gishathfetch.com by <a href="https://github.com/xenodus" target="_blank">xenodus</a> | <a href="#" data-bs-toggle="modal" data-bs-target="#privacy-modal">privacy policy</a>
-//                     </div>
-//                 </div>
-//             </div>
-//         </div>
-//     </div>
-// `;
 
 document.body.innerHTML += `
     <div id="privacy">
