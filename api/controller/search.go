@@ -123,7 +123,6 @@ func initAndMapScrappers(lgs []string) map[string]scrapper.Scrapper {
 		moxandlotus.StoreName:  moxandlotus.NewScrapper(),
 		mtgasia.StoreName:      mtgasia.NewScrapper(),
 		onemtg.StoreName:       onemtg.NewScrapper(),
-		// sanctuary.StoreName:    sanctuary.NewScrapper(),
 	}
 
 	if len(lgs) > 0 {
