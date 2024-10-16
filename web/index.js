@@ -33,6 +33,7 @@ let apiBaseUrl = "https://api.gishathfetch.com/";
 if (window.location.hostname === "staging.gishathfetch.com" || window.location.hostname === "localhost") {
     baseUrl = "https://staging.gishathfetch.com/";
     apiBaseUrl = "https://staging-api.gishathfetch.com/";
+    document.head.innerHTML += `<meta name="robots" content="noindex" />`;
 }
 
 setupConfig();
