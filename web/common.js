@@ -234,8 +234,8 @@ let lgsMap = [
     {
         "id": "mox-map",
         "name": "Mox & Lotus",
-        "address": "789 Geylang Rd, #3rd Floor, Singapore 389675",
-        "iframe": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.7673317965505!2d103.88685357576463!3d1.3151327582901533!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31da19d89d198d6b%3A0xb3e238feedd6c90d!2sMox%20%26%20Lotus!5e0!3m2!1sen!2ssg!4v1702821402075!5m2!1sen!2ssg",
+        "address": "215 Bedok North Street 1, #02-85, Singapore 460215",
+        "iframe": "https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d15954.999958678827!2d103.9334704!3d1.3259392!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31da19d89d198d6b%3A0xb3e238feedd6c90d!2sMox%20%26%20Lotus!5e0!3m2!1sen!2ssg!4v1730797737444!5m2!1sen!2ssg",
     },
     {
         "id": "mtg-asia-map",
