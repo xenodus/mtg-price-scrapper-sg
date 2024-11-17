@@ -11,6 +11,7 @@ import (
 	"mtg-price-scrapper-sg/scrapper"
 	"mtg-price-scrapper-sg/scrapper/agora"
 	"mtg-price-scrapper-sg/scrapper/cardaffinity"
+	"mtg-price-scrapper-sg/scrapper/cardboardcrackgames"
 	"mtg-price-scrapper-sg/scrapper/cardsandcollection"
 	"mtg-price-scrapper-sg/scrapper/cardscitadel"
 	"mtg-price-scrapper-sg/scrapper/duellerpoint"
@@ -112,19 +113,20 @@ func Search(input SearchInput) ([]scrapper.Card, error) {
 
 func initAndMapScrappers(lgs []string) map[string]scrapper.Scrapper {
 	storeScrappers := map[string]scrapper.Scrapper{
-		agora.StoreName:              agora.NewScrapper(),
-		cardaffinity.StoreName:       cardaffinity.NewScrapper(),
-		cardscitadel.StoreName:       cardscitadel.NewScrapper(),
-		cardsandcollection.StoreName: cardsandcollection.NewScrapper(),
-		duellerpoint.StoreName:       duellerpoint.NewScrapper(),
-		flagship.StoreName:           flagship.NewScrapper(),
-		gameshaven.StoreName:         gameshaven.NewScrapper(),
-		gog.StoreName:                gog.NewScrapper(),
-		hideout.StoreName:            hideout.NewScrapper(),
-		manapro.StoreName:            manapro.NewScrapper(),
-		moxandlotus.StoreName:        moxandlotus.NewScrapper(),
-		mtgasia.StoreName:            mtgasia.NewScrapper(),
-		onemtg.StoreName:             onemtg.NewScrapper(),
+		agora.StoreName:               agora.NewScrapper(),
+		cardaffinity.StoreName:        cardaffinity.NewScrapper(),
+		cardboardcrackgames.StoreName: cardboardcrackgames.NewScrapper(),
+		cardscitadel.StoreName:        cardscitadel.NewScrapper(),
+		cardsandcollection.StoreName:  cardsandcollection.NewScrapper(),
+		duellerpoint.StoreName:        duellerpoint.NewScrapper(),
+		flagship.StoreName:            flagship.NewScrapper(),
+		gameshaven.StoreName:          gameshaven.NewScrapper(),
+		gog.StoreName:                 gog.NewScrapper(),
+		hideout.StoreName:             hideout.NewScrapper(),
+		manapro.StoreName:             manapro.NewScrapper(),
+		moxandlotus.StoreName:         moxandlotus.NewScrapper(),
+		mtgasia.StoreName:             mtgasia.NewScrapper(),
+		onemtg.StoreName:              onemtg.NewScrapper(),
 	}
 
 	if len(lgs) > 0 {
