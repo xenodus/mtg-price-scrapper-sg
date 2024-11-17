@@ -9,6 +9,7 @@ const lgsCheckboxes = document.getElementsByName('lgs[]');
 const lgsOptions = [
     "Agora Hobby",
     "Card Affinity",
+    "Cardboard Crack Games",
     "Cards Citadel",
     "Cards & Collections",
     "Dueller's Point",

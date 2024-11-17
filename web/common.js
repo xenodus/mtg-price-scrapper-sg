@@ -172,6 +172,12 @@ let lgsMap = [
         "iframe": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.778050505021!2d103.85967687451628!3d1.3084089617085968!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31da19c9f7d7f74d%3A0xeaa1a66df7d4bcd6!2sAgora%20Hobby!5e0!3m2!1sen!2ssg!4v1702820213937!5m2!1sen!2ssg",
     },
     {
+        "id": "cardboard-crack-games-map",
+        "name": "Cardboard Crack Games",
+        "address": "Upper Bukit Timah Rd, #03-28 Beauty World Centre, 144, Singapore 588177",
+        "iframe": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.7233430292667!2d103.7736843749657!3d1.3423740986449086!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31da1920d676db93%3A0xe7b298b897da7b52!2sCardboard%20Crack%20Games!5e0!3m2!1sen!2ssg!4v1731824736033!5m2!1sen!2ssg",
+    },
+    {
         "id": "cards-citadel-map",
         "name": "Cards Citadel",
         "address": "464 Crawford Ln, #02-01, Singapore 190464",
