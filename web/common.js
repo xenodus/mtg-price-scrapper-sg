@@ -275,7 +275,7 @@ for(let i = 0; i < lgsMap.length; i++) {
         </div>    
     `;
 }
-mapListHtml += `<ul></div>`;
+mapListHtml += `</ul></div>`;
 document.getElementById("map").getElementsByClassName("modal-body")[0].innerHTML = mapListHtml + mapItemsHtml;
 
 // Init
