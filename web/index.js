@@ -27,7 +27,6 @@ const alreadyInCartBtnHtml = `<i data-feather="check-square" class="cartIcon"></
 let contentAd = "";
 let timeouts = [];
 let searchResults = [];
-let searchHistory = [];
 let baseUrl = "https://gishathfetch.com/";
 let apiBaseUrl = "https://api.gishathfetch.com/";
 

@@ -3,7 +3,7 @@ document.body.innerHTML += `
         <div class="d-flex flex-row align-items-center justify-content-center">
             <a data-bs-toggle="offcanvas" href="#offcanvasRight" role="button" aria-controls="offcanvasRight" class="py-1 link-light link-offset-2 link-underline-opacity-0">
                 <div class="px-3 py-1">
-                    <i data-feather="folder-plus" style="width: 14px; margin-right: 4px; position: relative; bottom: 2px;"></i>Saved
+                    <i data-feather="folder-plus" style="width: 14px; margin-right: 4px; position: relative; bottom: 2px;"></i>Saved<span id="cartNo"></span>
                 </div>
             </a>        
             <a href="#" data-bs-toggle="modal" data-bs-target="#map-modal" class="py-1 link-light link-offset-2 link-underline-opacity-0">
@@ -281,6 +281,7 @@ document.getElementById("map").getElementsByClassName("modal-body")[0].innerHTML
 // Init
 setVersionAndClearStorage();
 onloadCart();
+updateCartNo();
 updateCartPage();
 
 function setVersionAndClearStorage() {
@@ -352,6 +353,17 @@ function updateCartPage() {
     cartContent.innerHTML = html;
     feather.replace();
     removeCartEventListeners();
+    updateCartNo();
+}
+
+function updateCartNo() {
+    let cartNo = document.getElementById("cartNo");
+
+    if (cart.length > 0) {
+        cartNo.innerHTML = ` (` + cart.length + `)`;
+    } else {
+        cartNo.innerHTML = ``;
+    }
 }
 
 function removeCartEventListeners() {
