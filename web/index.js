@@ -49,8 +49,13 @@ function setupConfig() {
 function onloadSearch() {
     const urlParams = new URLSearchParams(window.location.search);
     const searchParam = urlParams.get('s');
+    const lgsParam = urlParams.get('src');
 
     if (searchParam !== "") {
+        if (lgsParam !== "") {
+            localStorage.setItem("lgsSelectedTest", encodeURIComponent(lgsParam));
+            appendLgsCheckboxes();
+        }
         searchInput.value = searchParam;
         submitBtn.click();
     }

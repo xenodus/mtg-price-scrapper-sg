@@ -322,7 +322,7 @@ function updateCartPage() {
 
         for(let i=0; i<cart.length; i++) {
             let removeFromCartBtn = `<button data-index="`+i+`" type="button" class="removeFromCartBtn btn btn-danger btn-sm removeFromCartBtn"><i data-feather="trash-2" class="cartIcon"></i> Remove</button>`;
-            let searchBtn = `<a href="/?s=`+cart[i]["name"]+`" class="btn btn-primary btn-sm cartSearchBtn ms-1"><i data-feather="search" class="cartIcon"></i> Search</a>`;
+            let searchBtn = `<a href="/?s=`+cart[i]["name"]+`&src=`+cart[i]["src"]+`" class="btn btn-primary btn-sm cartSearchBtn ms-1"><i data-feather="search" class="cartIcon"></i> Search</a>`;
 
             html += `
             <div class="col-6 mb-3">
