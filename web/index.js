@@ -51,12 +51,12 @@ function onloadSearch() {
     const searchParam = urlParams.get('s');
     const lgsParam = urlParams.get('src');
 
-    if (searchParam !== "") {
-        if (lgsParam !== "") {
-            localStorage.setItem("lgsSelectedTest", encodeURIComponent(lgsParam));
+    if (searchParam !== "" && searchParam !== null) {
+        if (lgsParam !== "" && lgsParam !== null && lgsOptions.includes(decodeURIComponent(lgsParam))) {
+            localStorage.setItem("lgsSelected", encodeURIComponent(lgsParam));
             appendLgsCheckboxes();
         }
-        searchInput.value = searchParam;
+        searchInput.value = decodeURIComponent(searchParam);
         submitBtn.click();
     }
 }
