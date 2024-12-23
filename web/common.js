@@ -192,8 +192,8 @@ let lgsMap = [
     {
         "id": "flagship-games-map",
         "name": "Flagship Games",
-        "address": "5 Jln Pemimpin, #03-01A, Singapore 577197",
-        "iframe": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.7100448274964!2d103.8376813757648!3d1.3505012580854614!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31da173ef6ffcc0b%3A0x880386dee363a253!2sFlagship%20Games!5e0!3m2!1sen!2ssg!4v1702820928970!5m2!1sen!2ssg",
+        "address": "214 Bishan St. 23, B1-223, Singapore 570214",
+        "iframe": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d490.0218996351789!2d103.84829838647084!3d1.3574649065942905!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31da173ef6ffcc0b%3A0x880386dee363a253!2sFlagship%20Games!5e0!3m2!1sen!2ssg!4v1734958555684!5m2!1sen!2ssg",
     },
     {
         "id": "games-haven-pl-map",
