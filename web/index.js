@@ -47,15 +47,13 @@ function setupConfig() {
 
 function onloadSearch() {
     const urlParams = new URLSearchParams(window.location.search);
-    const searchParam = urlParams.get('s');
-    const lgsParam = urlParams.get('src');
 
-    if (searchParam !== "" && searchParam !== null) {
-        if (lgsParam !== "" && lgsParam !== null && lgsOptions.includes(decodeURIComponent(lgsParam))) {
-            localStorage.setItem("lgsSelected", encodeURIComponent(lgsParam));
+    if (urlParams.has('s') && !urlParams.has('s', '')) {
+        if (urlParams.has('src') && !urlParams.has('src', '') && lgsOptions.includes(decodeURIComponent(urlParams.get('src')))) {
+            localStorage.setItem("lgsSelected", encodeURIComponent(urlParams.get('src')));
             appendLgsCheckboxes();
         }
-        searchInput.value = decodeURIComponent(searchParam);
+        searchInput.value = decodeURIComponent(urlParams.get('s'));
         submitBtn.click();
     }
 }
