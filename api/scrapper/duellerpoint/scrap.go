@@ -56,7 +56,11 @@ func (s Store) Scrap(searchStr string) ([]scrapper.Card, error) {
 				case 2:
 					break
 				case 3:
-					c.Quality = se3.Find("p > strong").First().Text()
+					se3.Find("p").Each(func(l int, se4 *goquery.Selection) {
+						if strings.Contains(se4.Find("span").Text(), "Condition") {
+							c.Quality = se4.Find("strong").Text()
+						}
+					})
 				case 4:
 					if strings.Contains(se3.Text(), "left") {
 						c.InStock = true
