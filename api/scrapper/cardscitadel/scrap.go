@@ -74,13 +74,15 @@ func parsePriceAndQuality(priceQualityStr string) (float64, string, error) {
 	priceQualityStrSlice := strings.Split(priceQualityStr, " - ")
 	if len(priceQualityStrSlice) == 2 {
 		quality := strings.TrimSpace(priceQualityStrSlice[0])
-
-		priceStr := strings.TrimSpace(priceQualityStrSlice[1])
-		priceStr = strings.Replace(priceStr, "$", "", -1)
-		priceStr = strings.Replace(priceStr, ",", "", -1)
-		price, err := strconv.ParseFloat(priceStr, 64)
-
+		price, err := parsePrice(priceQualityStrSlice[1])
 		return price, quality, err
 	}
 	return 0, "", nil
+}
+
+func parsePrice(price string) (float64, error) {
+	priceStr := strings.TrimSpace(price)
+	priceStr = strings.Replace(priceStr, "$", "", -1)
+	priceStr = strings.Replace(priceStr, ",", "", -1)
+	return strconv.ParseFloat(priceStr, 64)
 }
