@@ -45,7 +45,9 @@ func (s Store) Scrap(searchStr string) ([]scrapper.Card, error) {
 
 	doc.Find("div.container table > tbody").Each(func(i int, se *goquery.Selection) {
 		se.Find("tr").Each(func(j int, se2 *goquery.Selection) {
-			c := scrapper.Card{}
+			c := scrapper.Card{
+				Source: s.Name,
+			}
 			se2.Find("td").Each(func(k int, se3 *goquery.Selection) {
 				switch k {
 				case 0:
