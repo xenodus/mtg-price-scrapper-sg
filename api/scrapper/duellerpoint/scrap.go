@@ -54,7 +54,7 @@ func (s Store) Scrap(searchStr string) ([]scrapper.Card, error) {
 					c.Url = StoreBaseURL + se3.Find("a.product-list-thumb").AttrOr("href", "")
 					c.Img = StoreBaseURL + se3.Find("a.product-list-thumb img").AttrOr("src", "")
 				case 1:
-					c.Name = se3.Text()
+					c.Name = strings.TrimSpace(se3.Text())
 				case 2:
 					break
 				case 3:
