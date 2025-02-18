@@ -1,4 +1,4 @@
-FROM golang:1.21.3-alpine3.18 as build
+FROM golang:1.21.3-alpine3.18 AS build
 WORKDIR /mtg-price-scrapper
 # Copy dependencies list
 COPY api ./api
