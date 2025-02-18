@@ -1,9 +1,11 @@
 package xmlquery
 
 import (
-	"bytes"
+	"bufio"
 	"encoding/xml"
 	"fmt"
+	"html"
+	"io"
 	"strings"
 )
 
@@ -14,8 +16,8 @@ const (
 	// DocumentNode is a document object that, as the root of the document tree,
 	// provides access to the entire XML document.
 	DocumentNode NodeType = iota
-	// DeclarationNode is the document type declaration, indicated by the following
-	// tag (for example, <!DOCTYPE...> ).
+	// DeclarationNode is the document type declaration, indicated by the
+	// following tag (for example, <!DOCTYPE...> ).
 	DeclarationNode
 	// ElementNode is an element (for example, <item> ).
 	ElementNode
@@ -27,7 +29,15 @@ const (
 	CommentNode
 	// AttributeNode is an attribute of element.
 	AttributeNode
+	// NotationNode is a directive represents in document (for example, <!text...>).
+	NotationNode
 )
+
+type Attr struct {
+	Name         xml.Name
+	Value        string
+	NamespaceURI string
+}
 
 // A Node consists of a NodeType and some Data (tag name for
 // element nodes, content for text) and are part of a tree of Nodes.
@@ -38,34 +48,103 @@ type Node struct {
 	Data         string
 	Prefix       string
 	NamespaceURI string
-	Attr         []xml.Attr
+	Attr         []Attr
 
 	level int // node level in the tree
 }
 
+type outputConfiguration struct {
+	printSelf              bool
+	preserveSpaces         bool
+	emptyElementTagSupport bool
+	skipComments           bool
+	useIndentation         string
+}
+
+type OutputOption func(*outputConfiguration)
+
+// WithOutputSelf configures the Node to print the root node itself
+func WithOutputSelf() OutputOption {
+	return func(oc *outputConfiguration) {
+		oc.printSelf = true
+	}
+}
+
+// WithEmptyTagSupport empty tags should be written as <empty/> and
+// not as <empty></empty>
+func WithEmptyTagSupport() OutputOption {
+	return func(oc *outputConfiguration) {
+		oc.emptyElementTagSupport = true
+	}
+}
+
+// WithoutComments will skip comments in output
+func WithoutComments() OutputOption {
+	return func(oc *outputConfiguration) {
+		oc.skipComments = true
+	}
+}
+
+// WithPreserveSpace will preserve spaces in output
+func WithPreserveSpace() OutputOption {
+	return func(oc *outputConfiguration) {
+		oc.preserveSpaces = true
+	}
+}
+
+// WithoutPreserveSpace will not preserve spaces in output
+func WithoutPreserveSpace() OutputOption {
+	return func(oc *outputConfiguration) {
+		oc.preserveSpaces = false
+	}
+}
+
+// WithIndentation sets the indentation string used for formatting the output.
+func WithIndentation(indentation string) OutputOption {
+	return func(oc *outputConfiguration) {
+		oc.useIndentation = indentation
+	}
+}
+
+func newXMLName(name string) xml.Name {
+	if i := strings.IndexByte(name, ':'); i > 0 {
+		return xml.Name{
+			Space: name[:i],
+			Local: name[i+1:],
+		}
+	}
+	return xml.Name{
+		Local: name,
+	}
+}
+
+func (n *Node) Level() int {
+	return n.level
+}
+
 // InnerText returns the text between the start and end tags of the object.
 func (n *Node) InnerText() string {
-	var output func(*bytes.Buffer, *Node)
-	output = func(buf *bytes.Buffer, n *Node) {
+	var output func(*strings.Builder, *Node)
+	output = func(b *strings.Builder, n *Node) {
 		switch n.Type {
 		case TextNode, CharDataNode:
-			buf.WriteString(n.Data)
+			b.WriteString(n.Data)
 		case CommentNode:
 		default:
 			for child := n.FirstChild; child != nil; child = child.NextSibling {
-				output(buf, child)
+				output(b, child)
 			}
 		}
 	}
 
-	var buf bytes.Buffer
-	output(&buf, n)
-	return buf.String()
+	var b strings.Builder
+	output(&b, n)
+	return b.String()
 }
 
 func (n *Node) sanitizedData(preserveSpaces bool) string {
 	if preserveSpaces {
-		return strings.Trim(n.Data, "\n\t")
+		return n.Data
 	}
 	return strings.TrimSpace(n.Data)
 }
@@ -79,84 +158,240 @@ func calculatePreserveSpaces(n *Node, pastValue bool) bool {
 	return pastValue
 }
 
-func outputXML(buf *bytes.Buffer, n *Node, preserveSpaces bool) {
+type indentation struct {
+	level    int
+	hasChild bool
+	indent   string
+	w        io.Writer
+}
+
+func newIndentation(indent string, w io.Writer) *indentation {
+	if indent == "" {
+		return nil
+	}
+	return &indentation{
+		indent: indent,
+		w:      w,
+	}
+}
+
+func (i *indentation) NewLine() (err error) {
+	if i == nil {
+		return
+	}
+	_, err = io.WriteString(i.w, "\n")
+	return
+}
+
+func (i *indentation) Open() (err error) {
+	if i == nil {
+		return
+	}
+
+	if err = i.writeIndent(); err != nil {
+		return
+	}
+
+	i.level++
+	i.hasChild = false
+	return
+}
+
+func (i *indentation) Close() (err error) {
+	if i == nil {
+		return
+	}
+	i.level--
+	if i.hasChild {
+		if err = i.writeIndent(); err != nil {
+			return
+		}
+	}
+	i.hasChild = true
+	return
+}
+
+func (i *indentation) writeIndent() (err error) {
+	_, err = io.WriteString(i.w, "\n")
+	if err != nil {
+		return
+	}
+	_, err = io.WriteString(i.w, strings.Repeat(i.indent, i.level))
+	return
+}
+
+func outputXML(w io.Writer, n *Node, preserveSpaces bool, config *outputConfiguration, indent *indentation) (err error) {
 	preserveSpaces = calculatePreserveSpaces(n, preserveSpaces)
 	switch n.Type {
-	case TextNode, CharDataNode:
-		xml.EscapeText(buf, []byte(n.sanitizedData(preserveSpaces)))
+	case TextNode:
+		_, err = io.WriteString(w, html.EscapeString(n.sanitizedData(preserveSpaces)))
+		return
+	case CharDataNode:
+		_, err = fmt.Fprintf(w, "<![CDATA[%v]]>", n.Data)
 		return
 	case CommentNode:
-		buf.WriteString("<!--")
-		buf.WriteString(n.Data)
-		buf.WriteString("-->")
+		if !config.skipComments {
+			_, err = fmt.Fprintf(w, "<!--%v-->", n.Data)
+		}
+		return
+	case NotationNode:
+		if err = indent.NewLine(); err != nil {
+			return
+		}
+		_, err = fmt.Fprintf(w, "<!%s>", n.Data)
 		return
 	case DeclarationNode:
-		buf.WriteString("<?" + n.Data)
+		_, err = io.WriteString(w, "<?"+n.Data)
+		if err != nil {
+			return
+		}
 	default:
+		if err = indent.Open(); err != nil {
+			return
+		}
 		if n.Prefix == "" {
-			buf.WriteString("<" + n.Data)
+			_, err = io.WriteString(w, "<"+n.Data)
 		} else {
-			buf.WriteString("<" + n.Prefix + ":" + n.Data)
+			_, err = fmt.Fprintf(w, "<%s:%s", n.Prefix, n.Data)
+		}
+		if err != nil {
+			return
 		}
 	}
 
 	for _, attr := range n.Attr {
 		if attr.Name.Space != "" {
-			buf.WriteString(fmt.Sprintf(` %s:%s=`, attr.Name.Space, attr.Name.Local))
+			_, err = fmt.Fprintf(w, ` %s:%s=`, attr.Name.Space, attr.Name.Local)
 		} else {
-			buf.WriteString(fmt.Sprintf(` %s=`, attr.Name.Local))
+			_, err = fmt.Fprintf(w, ` %s=`, attr.Name.Local)
 		}
-		buf.WriteByte('"')
-		xml.EscapeText(buf, []byte(attr.Value))
-		buf.WriteByte('"')
+		if err != nil {
+			return
+		}
+
+		_, err = fmt.Fprintf(w, `"%v"`, html.EscapeString(attr.Value))
+		if err != nil {
+			return
+		}
 	}
 	if n.Type == DeclarationNode {
-		buf.WriteString("?>")
+		_, err = io.WriteString(w, "?>")
 	} else {
-		buf.WriteString(">")
-	}
-	for child := n.FirstChild; child != nil; child = child.NextSibling {
-		outputXML(buf, child, preserveSpaces)
-	}
-	if n.Type != DeclarationNode {
-		if n.Prefix == "" {
-			buf.WriteString(fmt.Sprintf("</%s>", n.Data))
+		if n.FirstChild != nil || !config.emptyElementTagSupport {
+			_, err = io.WriteString(w, ">")
 		} else {
-			buf.WriteString(fmt.Sprintf("</%s:%s>", n.Prefix, n.Data))
+			_, err = io.WriteString(w, "/>")
+			if err != nil {
+				return
+			}
+			err = indent.Close()
+			return
 		}
 	}
+	if err != nil {
+		return
+	}
+	for child := n.FirstChild; child != nil; child = child.NextSibling {
+		err = outputXML(w, child, preserveSpaces, config, indent)
+		if err != nil {
+			return
+		}
+	}
+	if n.Type != DeclarationNode {
+		if err = indent.Close(); err != nil {
+			return
+		}
+		if n.Prefix == "" {
+			_, err = fmt.Fprintf(w, "</%s>", n.Data)
+		} else {
+			_, err = fmt.Fprintf(w, "</%s:%s>", n.Prefix, n.Data)
+		}
+	}
+	return
 }
 
 // OutputXML returns the text that including tags name.
 func (n *Node) OutputXML(self bool) string {
-	var buf bytes.Buffer
 	if self {
-		outputXML(&buf, n, false)
+		return n.OutputXMLWithOptions(WithOutputSelf())
+	}
+	return n.OutputXMLWithOptions()
+}
+
+// OutputXMLWithOptions returns the text that including tags name.
+func (n *Node) OutputXMLWithOptions(opts ...OutputOption) string {
+	var b strings.Builder
+	n.WriteWithOptions(&b, opts...)
+	return b.String()
+}
+
+// Write writes xml to given writer.
+func (n *Node) Write(writer io.Writer, self bool) error {
+	if self {
+		return n.WriteWithOptions(writer, WithOutputSelf())
+	}
+	return n.WriteWithOptions(writer)
+}
+
+// WriteWithOptions writes xml with given options to given writer.
+func (n *Node) WriteWithOptions(writer io.Writer, opts ...OutputOption) (err error) {
+	config := &outputConfiguration{
+		preserveSpaces: true,
+	}
+	// Set the options
+	for _, opt := range opts {
+		opt(config)
+	}
+	pastPreserveSpaces := config.preserveSpaces
+	preserveSpaces := calculatePreserveSpaces(n, pastPreserveSpaces)
+	b := bufio.NewWriter(writer)
+	defer b.Flush()
+
+	ident := newIndentation(config.useIndentation, b)
+	if config.printSelf && n.Type != DocumentNode {
+		err = outputXML(b, n, preserveSpaces, config, ident)
 	} else {
 		for n := n.FirstChild; n != nil; n = n.NextSibling {
-			outputXML(&buf, n, false)
+			err = outputXML(b, n, preserveSpaces, config, ident)
+			if err != nil {
+				break
+			}
 		}
 	}
-
-	return buf.String()
+	return
 }
 
 // AddAttr adds a new attribute specified by 'key' and 'val' to a node 'n'.
 func AddAttr(n *Node, key, val string) {
-	var attr xml.Attr
-	if i := strings.Index(key, ":"); i > 0 {
-		attr = xml.Attr{
-			Name:  xml.Name{Space: key[:i], Local: key[i+1:]},
-			Value: val,
-		}
-	} else {
-		attr = xml.Attr{
-			Name:  xml.Name{Local: key},
-			Value: val,
+	attr := Attr{
+		Name:  newXMLName(key),
+		Value: val,
+	}
+	n.Attr = append(n.Attr, attr)
+}
+
+// SetAttr allows an attribute value with the specified name to be changed.
+// If the attribute did not previously exist, it will be created.
+func (n *Node) SetAttr(key, value string) {
+	name := newXMLName(key)
+	for i, attr := range n.Attr {
+		if attr.Name == name {
+			n.Attr[i].Value = value
+			return
 		}
 	}
+	AddAttr(n, key, value)
+}
 
-	n.Attr = append(n.Attr, attr)
+// RemoveAttr removes the attribute with the specified name.
+func (n *Node) RemoveAttr(key string) {
+	name := newXMLName(key)
+	for i, attr := range n.Attr {
+		if attr.Name == name {
+			n.Attr = append(n.Attr[:i], n.Attr[i+1:]...)
+			return
+		}
+	}
 }
 
 // AddChild adds a new node 'n' to a node 'parent' as its last child.
@@ -174,11 +409,7 @@ func AddChild(parent, n *Node) {
 	parent.LastChild = n
 }
 
-// AddSibling adds a new node 'n' as a sibling of a given node 'sibling'.
-// Note it is not necessarily true that the new node 'n' would be added
-// immediately after 'sibling'. If 'sibling' isn't the last child of its
-// parent, then the new node 'n' will be added at the end of the sibling
-// chain of their parent.
+// AddSibling adds a new node 'n' as a last node of sibling chain for a given node 'sibling'.
 func AddSibling(sibling, n *Node) {
 	for t := sibling.NextSibling; t != nil; t = t.NextSibling {
 		sibling = t
@@ -188,6 +419,19 @@ func AddSibling(sibling, n *Node) {
 	n.PrevSibling = sibling
 	n.NextSibling = nil
 	if sibling.Parent != nil {
+		sibling.Parent.LastChild = n
+	}
+}
+
+// AddImmediateSibling adds a new node 'n' as immediate sibling a given node 'sibling'.
+func AddImmediateSibling(sibling, n *Node) {
+	n.Parent = sibling.Parent
+	n.NextSibling = sibling.NextSibling
+	sibling.NextSibling = n
+	n.PrevSibling = sibling
+	if n.NextSibling != nil {
+		n.NextSibling.PrevSibling = n
+	} else if n.Parent != nil {
 		sibling.Parent.LastChild = n
 	}
 }
@@ -218,4 +462,16 @@ func RemoveFromTree(n *Node) {
 	n.Parent = nil
 	n.PrevSibling = nil
 	n.NextSibling = nil
+}
+
+// GetRoot returns a root of the tree where 'n' is a node.
+func GetRoot(n *Node) *Node {
+	if n == nil {
+		return nil
+	}
+	root := n
+	for root.Parent != nil {
+		root = root.Parent
+	}
+	return root
 }
