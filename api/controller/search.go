@@ -23,6 +23,7 @@ import (
 	"mtg-price-scrapper-sg/scrapper/moxandlotus"
 	"mtg-price-scrapper-sg/scrapper/mtgasia"
 	"mtg-price-scrapper-sg/scrapper/onemtg"
+	"mtg-price-scrapper-sg/scrapper/tcgmarketplace"
 )
 
 type SearchInput struct {
@@ -41,12 +42,12 @@ func Search(input SearchInput) ([]scrapper.Card, error) {
 
 		log.Println("Start checking shops...")
 		for shopName, shopScrapper := range shopScrapperMap {
-			shopName := shopName
-			shopScrapper := shopScrapper
+			sName := shopName
+			sScrapper := shopScrapper
 			go func() {
 				start := time.Now()
-				c, _ := shopScrapper.Scrap(input.SearchString)
-				log.Println(fmt.Sprintf("Done: %s. Took: %s", shopName, time.Since(start)))
+				c, _ := sScrapper.Scrap(input.SearchString)
+				log.Println(fmt.Sprintf("Done: %s. Took: %s", sName, time.Since(start)))
 
 				if len(c) > 0 {
 					cards = append(cards, c...)
@@ -127,6 +128,7 @@ func initAndMapScrappers(lgs []string) map[string]scrapper.Scrapper {
 		moxandlotus.StoreName:         moxandlotus.NewScrapper(),
 		mtgasia.StoreName:             mtgasia.NewScrapper(),
 		onemtg.StoreName:              onemtg.NewScrapper(),
+		tcgmarketplace.StoreName:      tcgmarketplace.NewScrapper(),
 	}
 
 	if len(lgs) > 0 {
