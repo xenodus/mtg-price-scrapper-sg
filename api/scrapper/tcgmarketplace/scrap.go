@@ -156,8 +156,16 @@ func (s Store) Scrap(searchStr string) ([]scrapper.Card, error) {
 					continue
 				}
 
+				// Strip [XXX] prefix from card name
+				// e.g. [CMM] Deflecting Swat (V2)(Etched foil)
+				name := strings.TrimSpace(card.Name)
+				squareBracketIndex := strings.Index(name, "]")
+				if squareBracketIndex > 1 {
+					name = strings.TrimSpace(name[squareBracketIndex+1:])
+				}
+
 				cards = append(cards, scrapper.Card{
-					Name:    strings.TrimSpace(card.Name),
+					Name:    strings.TrimSpace(name),
 					Url:     card.URL,
 					InStock: true,
 					Price:   price,
@@ -168,6 +176,8 @@ func (s Store) Scrap(searchStr string) ([]scrapper.Card, error) {
 			}
 		}
 	}
+
+	log.Println(cards)
 
 	return cards, nil
 }
