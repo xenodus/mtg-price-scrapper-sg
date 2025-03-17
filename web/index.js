@@ -20,7 +20,8 @@ const lgsOptions = [
     "Mana Pro",
     "Mox & Lotus",
     "MTG Asia",
-    "OneMtg"
+    "OneMtg",
+    "The TCG Marketplace"
 ];
 const alreadyInCartBtnHtml = `<i data-feather="check-square" class="cartIcon"></i> Saved`;
 
