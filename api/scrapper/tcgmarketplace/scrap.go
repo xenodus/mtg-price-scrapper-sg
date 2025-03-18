@@ -23,7 +23,7 @@ const cardInfoAPI = "https://thetcgmarketplace.com:3501/product/advancedfilter"
 const mtgCategoryNo = 3
 const accessTokenKey = "TCG_MARKETPLACE_ACCESS_TOKEN"
 
-type cardLinkResponse struct {
+type apiResponse struct {
 	Status int `json:"status"`
 	Data   struct {
 		Message string `json:"message"`
@@ -31,6 +31,7 @@ type cardLinkResponse struct {
 			Name                  string      `json:"name"`
 			Setcode               string      `json:"setcode"`
 			Setname               string      `json:"setname"`
+			Image                 string      `json:"image"`
 			Language              string      `json:"language"`
 			CrdFoilType           interface{} `json:"crd_foil_type"`
 			Rarity                string      `json:"rarity"`
@@ -39,29 +40,6 @@ type cardLinkResponse struct {
 			NonFoilReferencePrice interface{} `json:"non_foil_reference_price"`
 			FoilReferencePrice    interface{} `json:"foil_reference_price"`
 			URL                   string      `json:"url"`
-		} `json:"data"`
-	} `json:"data"`
-	Meta struct {
-		Total int `json:"total"`
-	} `json:"meta"`
-}
-
-type cardInfoResponse struct {
-	Status int `json:"status"`
-	Data   struct {
-		Message string `json:"message"`
-		Data    []struct {
-			ID          int         `json:"id"`
-			Name        string      `json:"name"`
-			Setcode     string      `json:"setcode"`
-			Setname     string      `json:"setname"`
-			Language    string      `json:"language"`
-			Image       string      `json:"image"`
-			CrdFoilType interface{} `json:"crd_foil_type"`
-			SymbolImage string      `json:"symbol_image"`
-			Rarity      string      `json:"rarity"`
-			Available   interface{} `json:"available"`
-			From        interface{} `json:"from"`
 		} `json:"data"`
 	} `json:"data"`
 	Meta struct {
@@ -91,8 +69,7 @@ func NewScrapper() scrapper.Scrapper {
 
 func (s Store) Scrap(searchStr string) ([]scrapper.Card, error) {
 	var (
-		cardLinkRes cardLinkResponse
-		cardInfoRes cardInfoResponse
+		res         apiResponse
 		cards       []scrapper.Card
 		accessToken string
 	)
@@ -113,22 +90,19 @@ func (s Store) Scrap(searchStr string) ([]scrapper.Card, error) {
 		return cards, err
 	}
 
-	// todo: check if can get both in 1 api request
-	// 1st request to get card link and price
-	cardLinkRes, err = getCardLinkResponse(reqPayload)
+	res, err = getApiResponse(reqPayload)
 	if err != nil {
 		return cards, err
 	}
 
-	if len(cardLinkRes.Data.Data) > 0 {
-		// 2nd request to get card img
-		cardInfoRes, err = getCardInfoResponse(reqPayload)
-		if err != nil {
-			return cards, err
-		}
+	if len(res.Data.Data) > 0 {
+		for _, card := range res.Data.Data {
+			stock, err := strconv.ParseInt(fmt.Sprint(card.Available), 10, 64)
+			if err != nil {
+				continue
+			}
 
-		for _, card := range cardLinkRes.Data.Data {
-			if card.Available != nil && card.From != nil {
+			if stock > 0 {
 				price, err := strconv.ParseFloat(fmt.Sprint(card.From), 64)
 				if err != nil {
 					continue
@@ -142,14 +116,19 @@ func (s Store) Scrap(searchStr string) ([]scrapper.Card, error) {
 					name = strings.TrimSpace(name[squareBracketIndex+1:])
 				}
 
+				var img string
+				images := strings.Split(card.Image, " ")
+				if len(images) > 0 {
+					img = images[0]
+				}
+
 				cards = append(cards, scrapper.Card{
 					Name:    strings.TrimSpace(name),
 					Url:     card.URL,
 					InStock: true,
 					Price:   price,
 					Source:  s.Name,
-					// attempt to get image from 2nd request
-					Img: cardInfoRes.getImageURLByName(card.Name),
+					Img:     img,
 				})
 			}
 		}
@@ -157,57 +136,24 @@ func (s Store) Scrap(searchStr string) ([]scrapper.Card, error) {
 	return cards, nil
 }
 
-func getCardLinkResponse(payload []byte) (cardLinkResponse, error) {
-	var cardLinkRes cardLinkResponse
+func getApiResponse(payload []byte) (apiResponse, error) {
+	var res apiResponse
 
 	resp, err := http.Post(cardLinkAPI, "application/json", bytes.NewBuffer(payload))
 	if err != nil {
-		return cardLinkRes, err
+		return res, err
 	}
 	defer resp.Body.Close()
 
-	cardLinkBody, err := io.ReadAll(resp.Body)
+	body, err := io.ReadAll(resp.Body)
 	if err != nil {
-		return cardLinkRes, err
+		return res, err
 	}
 
-	err = json.Unmarshal(cardLinkBody, &cardLinkRes)
+	err = json.Unmarshal(body, &res)
 	if err != nil {
-		return cardLinkRes, err
+		return res, err
 	}
 
-	return cardLinkRes, nil
-}
-
-func getCardInfoResponse(payload []byte) (cardInfoResponse, error) {
-	var cardInfoRes cardInfoResponse
-
-	resp, err := http.Post(cardInfoAPI, "application/json", bytes.NewBuffer(payload))
-	if err != nil {
-		return cardInfoRes, err
-	}
-	defer resp.Body.Close()
-
-	cardInfoBody, err := io.ReadAll(resp.Body)
-	if err != nil {
-		return cardInfoRes, err
-	}
-
-	err = json.Unmarshal(cardInfoBody, &cardInfoRes)
-	if err != nil {
-		return cardInfoRes, err
-	}
-
-	return cardInfoRes, nil
-}
-
-func (c cardInfoResponse) getImageURLByName(name string) string {
-	if len(c.Data.Data) > 0 {
-		for _, card := range c.Data.Data {
-			if strings.TrimSpace(card.Name) == strings.TrimSpace(name) {
-				return card.Image
-			}
-		}
-	}
-	return ""
+	return res, nil
 }
