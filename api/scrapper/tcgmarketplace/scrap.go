@@ -115,40 +115,18 @@ func (s Store) Scrap(searchStr string) ([]scrapper.Card, error) {
 
 	// todo: check if can get both in 1 api request
 	// 1st request to get card link and price
-	resp, err := http.Post(cardLinkAPI, "application/json", bytes.NewBuffer(reqPayload))
-	if err != nil {
-		return cards, err
-	}
-	defer resp.Body.Close()
-
-	cardLinkBody, err := io.ReadAll(resp.Body)
-	if err != nil {
-		return cards, err
-	}
-
-	err = json.Unmarshal(cardLinkBody, &cardLinkRes)
-	if err != nil {
-		return cards, err
-	}
-
-	// 2nd request to get card img
-	resp, err = http.Post(cardInfoAPI, "application/json", bytes.NewBuffer(reqPayload))
-	if err != nil {
-		return cards, err
-	}
-	defer resp.Body.Close()
-
-	cardInfoBody, err := io.ReadAll(resp.Body)
-	if err != nil {
-		return cards, err
-	}
-
-	err = json.Unmarshal(cardInfoBody, &cardInfoRes)
+	cardLinkRes, err = getCardLinkResponse(reqPayload)
 	if err != nil {
 		return cards, err
 	}
 
 	if len(cardLinkRes.Data.Data) > 0 {
+		// 2nd request to get card img
+		cardInfoRes, err = getCardInfoResponse(reqPayload)
+		if err != nil {
+			return cards, err
+		}
+
 		for _, card := range cardLinkRes.Data.Data {
 			if card.Available != nil && card.From != nil {
 				price, err := strconv.ParseFloat(fmt.Sprint(card.From), 64)
@@ -176,10 +154,51 @@ func (s Store) Scrap(searchStr string) ([]scrapper.Card, error) {
 			}
 		}
 	}
-
-	log.Println(cards)
-
 	return cards, nil
+}
+
+func getCardLinkResponse(payload []byte) (cardLinkResponse, error) {
+	var cardLinkRes cardLinkResponse
+
+	resp, err := http.Post(cardLinkAPI, "application/json", bytes.NewBuffer(payload))
+	if err != nil {
+		return cardLinkRes, err
+	}
+	defer resp.Body.Close()
+
+	cardLinkBody, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return cardLinkRes, err
+	}
+
+	err = json.Unmarshal(cardLinkBody, &cardLinkRes)
+	if err != nil {
+		return cardLinkRes, err
+	}
+
+	return cardLinkRes, nil
+}
+
+func getCardInfoResponse(payload []byte) (cardInfoResponse, error) {
+	var cardInfoRes cardInfoResponse
+
+	resp, err := http.Post(cardInfoAPI, "application/json", bytes.NewBuffer(payload))
+	if err != nil {
+		return cardInfoRes, err
+	}
+	defer resp.Body.Close()
+
+	cardInfoBody, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return cardInfoRes, err
+	}
+
+	err = json.Unmarshal(cardInfoBody, &cardInfoRes)
+	if err != nil {
+		return cardInfoRes, err
+	}
+
+	return cardInfoRes, nil
 }
 
 func (c cardInfoResponse) getImageURLByName(name string) string {
