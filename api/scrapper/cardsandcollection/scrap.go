@@ -17,7 +17,7 @@ const StoreBaseURL = "https://cardsandcollections.com"
 const StoreApiURL = "/api/catalog/"
 const StoreSearchURL = "/?q="
 
-type apiResponse struct {
+type response struct {
 	Took     int  `json:"took"`
 	TimedOut bool `json:"timed_out"`
 	Shards   struct {
@@ -157,7 +157,7 @@ func NewScrapper() scrapper.Scrapper {
 
 func (s Store) Scrap(searchStr string) ([]scrapper.Card, error) {
 	var (
-		res   apiResponse
+		res   response
 		cards []scrapper.Card
 	)
 

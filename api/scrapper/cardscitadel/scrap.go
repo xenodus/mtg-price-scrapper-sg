@@ -11,6 +11,8 @@ const StoreName = "Cards Citadel"
 const StoreBaseURL = "https://cardscitadel.com/"
 const StoreSearchURL = "/search?q=*%s*"
 
+const binderposStoreURL = "card-citadel.myshopify.com"
+
 type Store struct {
 	Name      string
 	BaseUrl   string
@@ -27,7 +29,7 @@ func NewScrapper() scrapper.Scrapper {
 
 func (s Store) Scrap(searchStr string) ([]scrapper.Card, error) {
 	reqPayload, err := json.Marshal(binderpos.Payload{
-		StoreURL:    "card-citadel.myshopify.com",
+		StoreURL:    binderposStoreURL,
 		Game:        binderpos.ProductTypeMTG.ToString(),
 		Title:       searchStr,
 		InstockOnly: true,
