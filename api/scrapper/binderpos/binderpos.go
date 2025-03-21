@@ -33,7 +33,7 @@ func GetCards(storeName, storeBaseURL string, payload []byte) ([]scrapper.Card, 
 			for _, stock := range card.Variants {
 				if stock.Quantity > 0 {
 					cards = append(cards, scrapper.Card{
-						Name:    card.Title,
+						Name:    card.CardTitle,
 						Url:     storeBaseURL + productPath + card.Handle,
 						InStock: true,
 						Price:   stock.Price,
