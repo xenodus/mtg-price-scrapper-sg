@@ -1,2 +1,2 @@
-# mtg-price-scrapper-sg
-MTG price scrapper for local game stores in Singapore
+# mtg-price-checker-sg
+MTG price checker for local game stores in Singapore

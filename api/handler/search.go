@@ -8,13 +8,13 @@ import (
 	"strings"
 
 	"github.com/aws/aws-lambda-go/events"
-	"mtg-price-scrapper-sg/controller"
-	"mtg-price-scrapper-sg/pkg/config"
-	"mtg-price-scrapper-sg/scrapper"
+	"mtg-price-checker-sg/controller"
+	"mtg-price-checker-sg/gateway"
+	"mtg-price-checker-sg/pkg/config"
 )
 
 type WebResponse struct {
-	Data []scrapper.Card `json:"data"`
+	Data []gateway.Card `json:"data"`
 }
 
 func Search(_ context.Context, request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {

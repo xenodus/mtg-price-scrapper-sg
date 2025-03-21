@@ -8,22 +8,22 @@ import (
 	"strings"
 	"time"
 
-	"mtg-price-scrapper-sg/scrapper"
-	"mtg-price-scrapper-sg/scrapper/agora"
-	"mtg-price-scrapper-sg/scrapper/cardaffinity"
-	"mtg-price-scrapper-sg/scrapper/cardboardcrackgames"
-	"mtg-price-scrapper-sg/scrapper/cardsandcollection"
-	"mtg-price-scrapper-sg/scrapper/cardscitadel"
-	"mtg-price-scrapper-sg/scrapper/duellerpoint"
-	"mtg-price-scrapper-sg/scrapper/flagship"
-	"mtg-price-scrapper-sg/scrapper/gameshaven"
-	"mtg-price-scrapper-sg/scrapper/gog"
-	"mtg-price-scrapper-sg/scrapper/hideout"
-	"mtg-price-scrapper-sg/scrapper/manapro"
-	"mtg-price-scrapper-sg/scrapper/moxandlotus"
-	"mtg-price-scrapper-sg/scrapper/mtgasia"
-	"mtg-price-scrapper-sg/scrapper/onemtg"
-	"mtg-price-scrapper-sg/scrapper/tcgmarketplace"
+	"mtg-price-checker-sg/gateway"
+	"mtg-price-checker-sg/gateway/agora"
+	"mtg-price-checker-sg/gateway/cardaffinity"
+	"mtg-price-checker-sg/gateway/cardboardcrackgames"
+	"mtg-price-checker-sg/gateway/cardsandcollection"
+	"mtg-price-checker-sg/gateway/cardscitadel"
+	"mtg-price-checker-sg/gateway/duellerpoint"
+	"mtg-price-checker-sg/gateway/flagship"
+	"mtg-price-checker-sg/gateway/gameshaven"
+	"mtg-price-checker-sg/gateway/gog"
+	"mtg-price-checker-sg/gateway/hideout"
+	"mtg-price-checker-sg/gateway/manapro"
+	"mtg-price-checker-sg/gateway/moxandlotus"
+	"mtg-price-checker-sg/gateway/mtgasia"
+	"mtg-price-checker-sg/gateway/onemtg"
+	"mtg-price-checker-sg/gateway/tcgmarketplace"
 )
 
 type SearchInput struct {
@@ -31,22 +31,22 @@ type SearchInput struct {
 	Lgs          []string
 }
 
-func Search(input SearchInput) ([]scrapper.Card, error) {
-	var cards, inStockCards, inStockExactMatchCards, inStockPartialMatchCards, inStockPrefixMatchCards []scrapper.Card
+func Search(input SearchInput) ([]gateway.Card, error) {
+	var cards, inStockCards, inStockExactMatchCards, inStockPartialMatchCards, inStockPrefixMatchCards []gateway.Card
 
-	shopScrapperMap := initAndMapScrappers(input.Lgs)
+	shopNameToLGSMap := initAndMapShops(input.Lgs)
 
-	if len(shopScrapperMap) > 0 {
-		// Create a channel with a buffer size of shopScrapperMap
-		done := make(chan bool, len(shopScrapperMap))
+	if len(shopNameToLGSMap) > 0 {
+		// Create a channel with a buffer size of shopNameToLGSMap
+		done := make(chan bool, len(shopNameToLGSMap))
 
 		log.Println("Start checking shops...")
-		for shopName, shopScrapper := range shopScrapperMap {
+		for shopName, lgs := range shopNameToLGSMap {
 			sName := shopName
-			sScrapper := shopScrapper
+			sLGS := lgs
 			go func() {
 				start := time.Now()
-				c, _ := sScrapper.Scrap(input.SearchString)
+				c, _ := sLGS.Search(input.SearchString)
 				log.Println(fmt.Sprintf("Done: %s. Took: %s", sName, time.Since(start)))
 
 				if len(c) > 0 {
@@ -59,7 +59,7 @@ func Search(input SearchInput) ([]scrapper.Card, error) {
 		}
 
 		// Wait for all goroutines to finish
-		for i := 0; i < len(shopScrapperMap); i++ {
+		for i := 0; i < len(shopNameToLGSMap); i++ {
 			<-done
 		}
 		log.Println("End checking shops...")
@@ -112,31 +112,31 @@ func Search(input SearchInput) ([]scrapper.Card, error) {
 	return inStockCards, nil
 }
 
-func initAndMapScrappers(lgs []string) map[string]scrapper.Scrapper {
-	storeScrappers := map[string]scrapper.Scrapper{
-		agora.StoreName:               agora.NewScrapper(),
-		cardaffinity.StoreName:        cardaffinity.NewScrapper(),
-		cardboardcrackgames.StoreName: cardboardcrackgames.NewScrapper(),
-		cardscitadel.StoreName:        cardscitadel.NewScrapper(),
-		cardsandcollection.StoreName:  cardsandcollection.NewScrapper(),
-		duellerpoint.StoreName:        duellerpoint.NewScrapper(),
-		flagship.StoreName:            flagship.NewScrapper(),
-		gameshaven.StoreName:          gameshaven.NewScrapper(),
-		gog.StoreName:                 gog.NewScrapper(),
-		hideout.StoreName:             hideout.NewScrapper(),
-		manapro.StoreName:             manapro.NewScrapper(),
-		moxandlotus.StoreName:         moxandlotus.NewScrapper(),
-		mtgasia.StoreName:             mtgasia.NewScrapper(),
-		onemtg.StoreName:              onemtg.NewScrapper(),
-		tcgmarketplace.StoreName:      tcgmarketplace.NewScrapper(),
+func initAndMapShops(lgs []string) map[string]gateway.LGS {
+	lgsMap := map[string]gateway.LGS{
+		agora.StoreName:               agora.NewLGS(),
+		cardaffinity.StoreName:        cardaffinity.NewLGS(),
+		cardboardcrackgames.StoreName: cardboardcrackgames.NewLGS(),
+		cardscitadel.StoreName:        cardscitadel.NewLGS(),
+		cardsandcollection.StoreName:  cardsandcollection.NewLGS(),
+		duellerpoint.StoreName:        duellerpoint.NewLGS(),
+		flagship.StoreName:            flagship.NewLGS(),
+		gameshaven.StoreName:          gameshaven.NewLGS(),
+		gog.StoreName:                 gog.NewLGS(),
+		hideout.StoreName:             hideout.NewLGS(),
+		manapro.StoreName:             manapro.NewLGS(),
+		moxandlotus.StoreName:         moxandlotus.NewLGS(),
+		mtgasia.StoreName:             mtgasia.NewLGS(),
+		onemtg.StoreName:              onemtg.NewLGS(),
+		tcgmarketplace.StoreName:      tcgmarketplace.NewLGS(),
 	}
 
 	if len(lgs) > 0 {
-		for storeName := range storeScrappers {
+		for storeName := range lgsMap {
 			if !slices.Contains(lgs, storeName) {
-				delete(storeScrappers, storeName)
+				delete(lgsMap, storeName)
 			}
 		}
 	}
-	return storeScrappers
+	return lgsMap
 }

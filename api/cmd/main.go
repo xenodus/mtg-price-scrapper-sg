@@ -8,8 +8,8 @@ import (
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
-	"mtg-price-scrapper-sg/handler"
-	"mtg-price-scrapper-sg/pkg/config"
+	"mtg-price-checker-sg/handler"
+	"mtg-price-checker-sg/pkg/config"
 )
 
 func main() {
