@@ -23,7 +23,7 @@ const cardInfoAPI = "https://thetcgmarketplace.com:3501/product/advancedfilter"
 const mtgCategoryNo = 3
 const accessTokenKey = "TCG_MARKETPLACE_ACCESS_TOKEN"
 
-type apiResponse struct {
+type response struct {
 	Status int `json:"status"`
 	Data   struct {
 		Message string `json:"message"`
@@ -69,7 +69,7 @@ func NewScrapper() scrapper.Scrapper {
 
 func (s Store) Scrap(searchStr string) ([]scrapper.Card, error) {
 	var (
-		res         apiResponse
+		res         response
 		cards       []scrapper.Card
 		accessToken string
 	)
@@ -136,8 +136,8 @@ func (s Store) Scrap(searchStr string) ([]scrapper.Card, error) {
 	return cards, nil
 }
 
-func getApiResponse(payload []byte) (apiResponse, error) {
-	var res apiResponse
+func getApiResponse(payload []byte) (response, error) {
+	var res response
 
 	resp, err := http.Post(cardLinkAPI, "application/json", bytes.NewBuffer(payload))
 	if err != nil {

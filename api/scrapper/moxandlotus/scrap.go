@@ -19,7 +19,7 @@ const StoreSearchURL = "/products?title="
 const StoreApiURL = "/api/products?&limit=48&full_search=true&showStatus=false&is_paginated=true&in_stock=true&sortVariation=true&&category_id=1&variation_code=regular&order_by=Price%20Low%20to%20High&search="
 const CardImageURL = "https://d3nmvyqkci0c2u.cloudfront.net/%s/%s.png"
 
-type apiResponse struct {
+type response struct {
 	CurrentPage int `json:"current_page"`
 	Data        []struct {
 		ID                    int       `json:"id"`
@@ -113,7 +113,7 @@ func NewScrapper() scrapper.Scrapper {
 
 func (s Store) Scrap(searchStr string) ([]scrapper.Card, error) {
 	var (
-		res   apiResponse
+		res   response
 		cards []scrapper.Card
 	)
 
