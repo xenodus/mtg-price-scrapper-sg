@@ -87,12 +87,10 @@ document.body.innerHTML += `
                                 <div class="q-header"><h5>4. Why aren't all results shown?</h5></div>
                                 <div class="q-answer">
                                     <p>
-                                        Gishath Fetch only returns the result from the first page of most LGSs' websites.
-                                        Multiple page result is still being worked on. It has been implemented for the following LGS: Grey Ogre Games.
+                                        Gishath Fetch currently only returns the result from the first page of most LGSs' websites or the first 25 results.
                                     </p>
                                     <p>
-                                        There's a hard limit of 3 pages of result per LGS to both reduce the load on the LGSs' websites and also to make Gishath Fetch responsive.
-                                        This is generally not a problem as the most accurate results would be on the initial pages unless it's cards with many variations (e.g. basic lands).
+                                        This is generally not a problem as the most accurate results would be on the initial pages unless it's cards with many variations (e.g. basic lands). In such cases, you may want to visit the LGSs' websites directly.
                                     </p>
                                 </div>
                             </div>
