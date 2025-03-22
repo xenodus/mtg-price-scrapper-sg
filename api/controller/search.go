@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"fmt"
 	"log"
 	"slices"
 	"sort"
@@ -40,14 +39,20 @@ func Search(input SearchInput) ([]gateway.Card, error) {
 		// Create a channel with a buffer size of shopNameToLGSMap
 		done := make(chan bool, len(shopNameToLGSMap))
 
+		realStart := time.Now()
+		responseThreshold := 1 * time.Second
+
 		log.Println("Start checking shops...")
 		for shopName, lgs := range shopNameToLGSMap {
 			sName := shopName
 			sLGS := lgs
 			go func() {
 				start := time.Now()
-				c, _ := sLGS.Search(input.SearchString)
-				log.Println(fmt.Sprintf("Done: %s. Took: %s", sName, time.Since(start)))
+				c, err := sLGS.Search(input.SearchString)
+				if err != nil {
+					log.Printf("Error encountered searching [%s]: %v", sName, err)
+				}
+				log.Printf("Done searching [%s]. Took: [%s]", sName, time.Since(start))
 
 				if len(c) > 0 {
 					cards = append(cards, c...)
@@ -107,6 +112,12 @@ func Search(input SearchInput) ([]gateway.Card, error) {
 			inStockCards = append(inStockExactMatchCards, inStockPrefixMatchCards...)
 			inStockCards = append(inStockCards, inStockPartialMatchCards...)
 
+		}
+
+		// ensure request takes at least X (responseThreshold) seconds
+		if time.Since(realStart) < responseThreshold {
+			time.Sleep(responseThreshold - time.Since(realStart))
+			log.Printf("Sleeping for [%s]", responseThreshold-time.Since(realStart))
 		}
 	}
 	return inStockCards, nil

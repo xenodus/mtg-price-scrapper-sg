@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"io"
+	"log"
 	"net/http"
 
 	"mtg-price-checker-sg/gateway"
@@ -27,6 +28,8 @@ func GetCards(storeName, storeBaseURL string, payload []byte) ([]gateway.Card, e
 	if err != nil {
 		return cards, err
 	}
+
+	log.Printf("api response count for [%s]: [%d]", storeName, res.Count)
 
 	if res.Count > 0 {
 		for _, card := range res.Products {
@@ -62,6 +65,8 @@ func getApiResponse(payload []byte) (Response, error) {
 	if err != nil {
 		return res, err
 	}
+
+	log.Printf("api response status code: [%v]", resp.StatusCode)
 
 	if err = json.Unmarshal(body, &res); err != nil {
 		return res, err
